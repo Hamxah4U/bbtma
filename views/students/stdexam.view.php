@@ -61,7 +61,7 @@
                   <th>Test2</th>
                   <th>Test3</th>
                   <th>Exam</th>
-                  <th>Total</th>
+                  <th>Totalmmmmmm</th>
                 </tr>
               </thead>
               <tbody>
@@ -74,7 +74,10 @@
                   <tr>
                     <td><?= $i ++ ?></td>
                     <td><?= $student['FirstName'].' '.$student['OtherName'].' '.$student['Surname'] ?></td>
-                    <td><input type="text" value="<?php echo $student['Reg_no'] ?>" name="regno[]"></td>
+                    <td>
+                      <input type="text" name="stuid" value="">
+                      <input type="text" value="<?php echo $student['Reg_no'] ?>" name="regno[]">
+                    </td>
                     <td><input type="number" name="ftest[]" style="width: 40px;" value="<?php //echo $rowtest['Test']; ?>"></td>
                     <td><input type="number" name="stest[]" style="width: 40px;" value="<?php //echo $rowtest['Test']; ?>"></td>
                     <td><input type="number" name="rtest[]" style="width: 40px;" value="<?php //echo $rowtest['Test']; ?>"></td>

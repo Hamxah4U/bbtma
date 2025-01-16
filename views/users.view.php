@@ -145,6 +145,43 @@
 </script>
 
 <script>
+	/* $(document).ready(function () {
+		$('#userForm').on('submit', function (e) {
+				e.preventDefault();
+				$.ajax({
+						url: 'user.form.php',
+						dataType: 'JSON',
+						data: $(this).serialize(),
+						type: 'POST',
+						success: function (response) {
+								if (response.status === false) {
+										$('#errorFname').text(response.errors.fname || '');
+										$('#errorEmail').text(response.errors.email || response.errors.emailExist || '');
+										$('#errorPhone').text(response.errors.phone || response.errors.phoneExist || '');
+										$('#errorRole').text(response.errors.role || '');
+										$('#errorUnit').text(response.errors.unit || '');
+								} else {
+										Swal.fire({
+												icon: 'success',
+												title: response.success.success,
+												toast: true,
+												position: 'top-end',
+												showConfirmButton: false,
+												timer: 2000
+										});
+										$('#userForm')[0].reset();
+										$('#modalUser').modal('hide');
+										$('#usersTable').DataTable().ajax.reload();
+								}
+						},
+						error: function (xhr, status, error) {
+								alert('Error: ' + xhr.status + ' - ' + error);
+						}
+				});
+		});
+  }); */
+
+
 	$(document).ready(function(){
     $('#userForm').on('submit', function(e){
 			e.preventDefault();
@@ -189,7 +226,7 @@
 					}
 			});
     });
-});
+	});
 </script>
 
 <script>        

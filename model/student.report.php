@@ -1,46 +1,156 @@
 <?php
-    require 'Database.php';
+require 'Database.php';
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    $errors = [];
+    $success = [];
+    $session = $_POST['session'];
+    $term = $_POST['term'];
+    $stdclass = $_POST['stdclass'];
+    $studentregno = $_POST['stidentregno'];
+    
+    if(empty(trim($studentregno))){
+        $errors['studentregno'] = 'Registration number is required!';
+    }
+    if($stdclass == '--choose--'){
+        $errors['class'] = 'Class is required!';
+    }
+    if($session == '--choose--'){
+        $errors['session'] = 'Academic session is required!';
+    }
+    if($term == '--choose--'){
+        $errors['term'] = 'Academic term is required!';
+    }
+    
+    if(empty($errors)){
+        if(strtolower($studentregno) == 'all') {
+            $stmt = $db->conn->prepare('SELECT * FROM `score_tbl` 
+                JOIN `class_tbl` ON `class_tbl`.`class_ID` = stdclass 
+                JOIN `subject_tbl` ON `subject_tbl`.`sub_ID` = `subject` 
+                WHERE `stdclass` = :stdclass AND `session` = :session AND `term` = :term 
+                GROUP BY `Reg_no`, `stdID`, `stdclass`, `term`, `session`');
+            $stmt->execute([
+                ':stdclass' => $stdclass,
+                ':session' => $session,
+                ':term' => $term
+            ]);
+        } else {
+            $stmt = $db->conn->prepare('SELECT * FROM `score_tbl` 
+                JOIN `class_tbl` ON `class_tbl`.`class_ID` = stdclass 
+                JOIN `subject_tbl` ON `subject_tbl`.`sub_ID` = `subject` 
+                WHERE `stdclass` = :stdclass AND `Reg_no` = :Reg_no AND `session` = :session AND `term` = :term 
+                GROUP BY `Reg_no`, `stdID`, `stdclass`, `term`, `session`');
+            $stmt->execute([
+                ':stdclass' => $stdclass,
+                ':Reg_no' => $studentregno,
+                ':session' => $session,
+                ':term' => $term
+            ]);
+        }
 
-    if($_SERVER['REQUEST_METHOD'] == 'POST'){
-      $errors = [];
-      $success = [];
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if(count($result) > 0){
+            echo json_encode([
+                'status' => true,
+                'data' => $result
+            ]);
+        } else {
+            $errors['studentregno'] = 'No records found!';
+        }
+    }
+    
+    if(count($errors) > 0){
+        echo json_encode([
+            'status' => false,
+            'errors' => $errors
+        ]);
+    }
+}
+?>
 
-      // Fetching form inputs
-      $unit = $_POST['unit'];
-      $product = $_POST['product'];
-      $startDate  = $_POST['sdate'];
-      $endDate = $_POST['edate'];
-      $startTime  = $_POST['stime'];
-      $endTime = $_POST['etime'];
-      $status = $_POST['status'];
-      $user = $_POST['user'];
 
-      // Input validations
-      if(empty(trim($unit))){
-        $errors['unit'] = 'Department is required!';
-      }
+<?php
+    //require 'Database.php';
 
-      if(empty(trim($product))){
-        $errors['product'] = 'Product is required!';
-      }
+  /* if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    $errors = [];
+    $success = [];
+    $session = $_POST['session'];
+    $term = $_POST['term'];
+    $stdclass = $_POST['stdclass'];
+    $studentregno = $_POST['stidentregno'];
 
-      if(empty(trim($startDate))){
-        $errors['startDate'] = 'Starting date is required!';
-      }
+    if(empty(trim($studentregno))){
+      $errors['studentregno'] = 'Registration number is required!';
+    }
 
-      if(empty(trim($endDate))){
-        $errors['endDate'] = 'Ending date is required!';
-      }
+    if($stdclass == '--choose--'){
+      $errors['class'] = 'Class is required!';
+    }
 
-      if(empty(trim($startTime))){
-        $errors['currentTime'] = 'Starting Time is required!';
-      }
+    if($session == '--choose--'){
+      $errors['session'] = 'Academic session is required!';
+    }
 
-      if(empty(trim($endTime))){
-        $errors['lasstime'] = 'End Time is required!';
-      }
+    if($term == '--choose--'){
+      $errors['term'] = 'Academic term is required!';
+    }
 
-      // If no validation errors, proceed with the query
+    if(empty($errors)){
+      $stmt = $db->conn->prepare('SELECT * FROM `score_tbl` 
+        JOIN `class_tbl` ON `class_tbl`.`class_ID` = stdclass 
+        JOIN `subject_tbl` ON `subject_tbl`.`sub_ID` = `subject` 
+        WHERE `stdclass` = :stdclass AND `Reg_no` = :Reg_no AND `session` = :session AND `term` = :term ');
+
+        $stmt->execute([
+          ':stdclass' => $stdclass,
+          ':Reg_no' => $studentregno,
+          ':session' => $session,
+          ':term' => $term
+        ]);
+
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if(count($result) > 0){
+         '<table style="width:90%; border-collapse: collapse;"  id="customers" class="special">
+            <theade>
+              <tr id="tabletitle" style="font-size: 14pt; color:#000080; height:20px; padding-top:100px;border-top:solid thin silver;">
+                <th style="padding-top:5px;padding-bottom:5px;text-align: center;">#</th>
+                <th>Subjects</th>
+                <th>1<sup>st</sup> Test</th>
+                <th>2<sup>nd</sup> Test</th>
+                <th>3<sup>rd</sup> Test</th>
+                <th>Exam</th>
+                <th>Total</th>
+                <!--<th>Average</th>-->
+                <th>Grade</th>
+                <!-- <th>Position</th>-->
+                <th>Remark</th> 
+              </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+          </table>  ';
+        }
+    }
+
+    if(count($errors) > 0){
+      echo json_encode([
+        'status' => false,
+        'errors' => $errors
+      ]);
+    }else{
+      echo json_encode([
+        'status' => true,
+        'success' => $success
+      ]);
+    }
+
+  } */
+
+
+
+  /*
       if(empty($errors)){
         $query = "SELECT * FROM transaction_tbl t 
                 JOIN product_tbl p ON t.Product = p.proID 
@@ -139,8 +249,8 @@
           'status' => false,
           'errors' => $errors,
         ]);
-      }
-    }
+      } */
+   // }
 ?>
 
 <?php

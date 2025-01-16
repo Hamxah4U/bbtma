@@ -22,7 +22,8 @@ $routes = [
     '/assigsub' => 'controllers/assigsub.php',
     '/calender' => 'controllers/calender.php',
     '/logout' => 'controllers/logout.php',
-    '/changepassword' => 'controllers/changepassword.php'
+    '/changepassword' => 'controllers/changepassword.php',
+    '/report' => 'controllers/report.php'
 ];
 
 if(array_key_exists($uri, $routes)){

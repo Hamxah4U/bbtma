@@ -66,9 +66,9 @@
         } elseif (!move_uploaded_file($featuredImage['tmp_name'], $targetFilePath)) {
             $errors['image'] = 'Failed to upload the image!';
         }
-        } else {
+        } /* else {
         $errors['image'] = 'Image is required!';
-      }
+      } */
 
       if(empty($errors)){
         session_start();

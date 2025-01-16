@@ -20,6 +20,7 @@
 											<div class="p-5">
 												<div class="text-center">
 													<h1 class="h4 text-gray-900 mb-4"><strong>USER LOGIN</strong></h1>
+													<img src="../img/bbtma.png" alt="" style="width: 30%;">
 												</div>
 												<form id="loginForm">
 													<div class="form-group">
