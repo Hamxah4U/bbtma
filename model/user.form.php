@@ -62,10 +62,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 try {
                     // SMTP Server Settings
                     $mail->isSMTP();
-                    $mail->Host = 'bbtma.sfge.org.ng';
+                    $mail->Host = ''; //example.com
                     $mail->SMTPAuth = true;
-                    $mail->Username = 'info@bbtma.sfge.org.ng';
-                    $mail->Password = '*H@mxah4u#';
+                    $mail->Username = ''; //info@example.eg.org.ng
+                    $mail->Password = ''; //**********/
                     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; 
                     $mail->Port = 465;
 
