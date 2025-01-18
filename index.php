@@ -1,8 +1,6 @@
 <?php
 session_start();
-
 $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
-
 if (!isset($_SESSION['userID']) && $uri != '/' && $uri != '/login') {
    header('Location: /');
    exit();
@@ -23,7 +21,9 @@ $routes = [
     '/calender' => 'controllers/calender.php',
     '/logout' => 'controllers/logout.php',
     '/changepassword' => 'controllers/changepassword.php',
-    '/report' => 'controllers/report.php'
+    '/report' => 'controllers/report.php',
+    '/printresult' => 'controllers/printresult.php',
+    '/generatepdf' => 'controllers/generatepdf.php',
 ];
 
 if(array_key_exists($uri, $routes)){

@@ -86,9 +86,9 @@
 
 							<div class="row">
 								<div class="col-md-6">
-									<button type="button" id="btn2" class="btn btn-danger" onclick="PrintDoc()">
+									<!-- <button type="button" id="btn2" class="btn btn-danger" onclick="PrintDoc()">
 										<i class="icofont-print"></i> Print
-									</button>
+									</button> -->
 								</div>
 								<div class="col-md-6 text-end">
 									<input type="submit" class="btn btn-primary" value="Search">
@@ -100,7 +100,7 @@
 					<div id="reportResults" class="mt-4"></div>
 				</div>
       </div>
-			<table id="customers" class="table">
+			<!-- <table id="customers" class="table">
     <thead>
         <tr>
             <th>#</th>
@@ -113,9 +113,9 @@
         </tr>
     </thead>
     <tbody>
-        <!-- Table rows will be appended here -->
+        
     </tbody>
-</table>
+</table> -->
 
 
 <?php require 'partials/footer.php'; ?>
@@ -136,7 +136,10 @@
                     $('#errorClass').text(response.errors.class || '');
                     $('#errorRegNo').text(response.errors.studentregno || '');
                 } else {
-                    let tableContent = '';
+									setTimeout(function(){
+										window.location.href = response.success.redirect
+									}, 1000)
+                    /* let tableContent = '';
                     response.data.forEach(function(row, index){
                         tableContent += '<tr>';
                         tableContent += '<td>' + (index + 1) + '</td>';
@@ -149,7 +152,7 @@
                         // Add other columns as needed
                         tableContent += '</tr>';
                     });
-                    $('#customers tbody').html(tableContent);
+                    $('#customers tbody').html(tableContent); */
                 }
             },
             error: function(xhr, status, error){

@@ -1,5 +1,6 @@
 <?php
 require 'Database.php';
+session_start();
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $errors = [];
     $success = [];
@@ -23,38 +24,33 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     
     if(empty($errors)){
         if(strtolower($studentregno) == 'all') {
-            $stmt = $db->conn->prepare('SELECT * FROM `score_tbl` 
-                JOIN `class_tbl` ON `class_tbl`.`class_ID` = stdclass 
-                JOIN `subject_tbl` ON `subject_tbl`.`sub_ID` = `subject` 
-                WHERE `stdclass` = :stdclass AND `session` = :session AND `term` = :term 
-                GROUP BY `Reg_no`, `stdID`, `stdclass`, `term`, `session`');
+          $stmt = $db->conn->prepare('SELECT * FROM `score_tbl` WHERE `stdclass` = :stdclass AND `Reg_no` = :Reg_no AND `session` = :session AND `term` = :term');
             $stmt->execute([
                 ':stdclass' => $stdclass,
                 ':session' => $session,
                 ':term' => $term
             ]);
-        } else {
-            $stmt = $db->conn->prepare('SELECT * FROM `score_tbl` 
-                JOIN `class_tbl` ON `class_tbl`.`class_ID` = stdclass 
-                JOIN `subject_tbl` ON `subject_tbl`.`sub_ID` = `subject` 
-                WHERE `stdclass` = :stdclass AND `Reg_no` = :Reg_no AND `session` = :session AND `term` = :term 
-                GROUP BY `Reg_no`, `stdID`, `stdclass`, `term`, `session`');
+        }else{
+            $stmt = $db->conn->prepare('SELECT * FROM `score_tbl` WHERE `stdclass` = :stdclass AND `Reg_no` = :Reg_no AND `session` = :session AND `term` = :term');
             $stmt->execute([
-                ':stdclass' => $stdclass,
-                ':Reg_no' => $studentregno,
-                ':session' => $session,
-                ':term' => $term
+              ':stdclass' => $stdclass,
+              ':Reg_no' => $studentregno,
+              ':session' => $session,
+              ':term' => $term
             ]);
         }
 
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
         if(count($result) > 0){
-            echo json_encode([
-                'status' => true,
-                'data' => $result
-            ]);
-        } else {
-            $errors['studentregno'] = 'No records found!';
+          $_SESSION['report_result'] = $result;
+          $success['redirect'] = '/printresult';
+          echo json_encode([
+            'status' => true,
+            'success' => $success
+        ]);
+        }else{
+          $errors['studentregno'] = 'No records found!';
         }
     }
     
