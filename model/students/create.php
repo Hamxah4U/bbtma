@@ -21,6 +21,10 @@
       $featuredImage = $_FILES['image'];
       $reg_no = $_POST['reg_no'];
 
+      if(empty(trim($reg_no))){
+        $errors['studentnumber'] = 'Registration faild to generate!';
+      }
+
       if($gender == '--choose--'){
         $errors['gender'] = 'Gender is required!';
       }

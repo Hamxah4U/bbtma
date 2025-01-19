@@ -100,23 +100,6 @@
 					<div id="reportResults" class="mt-4"></div>
 				</div>
       </div>
-			<!-- <table id="customers" class="table">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Subject</th>
-            <th>First</th>
-            <th>Second</th>
-            <th>Third</th>
-            <th>Exam</th>
-            <th>Total Score</th>
-        </tr>
-    </thead>
-    <tbody>
-        
-    </tbody>
-</table> -->
-
 
 <?php require 'partials/footer.php'; ?>
 <script>
@@ -139,20 +122,6 @@
 									setTimeout(function(){
 										window.location.href = response.success.redirect
 									}, 1000)
-                    /* let tableContent = '';
-                    response.data.forEach(function(row, index){
-                        tableContent += '<tr>';
-                        tableContent += '<td>' + (index + 1) + '</td>';
-                        tableContent += '<td>' + row.subject + '</td>';
-                        tableContent += '<td>' + row.first + '</td>';
-                        tableContent += '<td>' + row.second + '</td>';
-                        tableContent += '<td>' + row.third + '</td>';
-                        tableContent += '<td>' + row.exam + '</td>';
-                        tableContent += '<td>' + row.tscore + '</td>';
-                        // Add other columns as needed
-                        tableContent += '</tr>';
-                    });
-                    $('#customers tbody').html(tableContent); */
                 }
             },
             error: function(xhr, status, error){
@@ -161,31 +130,4 @@
         })
     })
 	});
-
-	/* $(document).ready(function(){
-		$('#adminReport').on('submit', function(e){
-			e.preventDefault();
-			$('.text-danger').text('');
-			$.ajax({
-				url: 'model/student.report.php',
-				type: 'POST',
-				dataType: 'JSON',
-				data: $(this).serialize(),
-				success: function(response){
-					if(! response.status){
-						// alert('empty');
-						$('#errorSession').text(response.errors.session || '');
-						$('#errorTerm').text(response.errors.term || '');
-						$('#errorClass').text(response.errors.class || '');
-						$('#errorRegNo').text(response.errors.studentregno || '');
-					}else{
-						alert('success');
-					}
-				},
-				error: function(xhr, status, error){
-					alert('fun error:' + xhr + status + error);
-				}
-			})
-		})
-	}) */
 </script>

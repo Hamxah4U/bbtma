@@ -42,8 +42,8 @@
 						</div> -->
 
 						<!-- Content Row -->
-                <form method="POST" id="createStudent" enctype="multipart/form-data">
-                  <input type="text" name="stdID" id="" value="<?= $rowstd['stu_ID'] ?>">
+                <form method="POST" id="updateStudent" enctype="multipart/form-data">
+                  <input type="hidden" name="stdID" id="" value="<?= $rowstd['stu_ID'] ?>">
                     <div class="form-row">
                         <div class="col-md-4 mb-3">
                             <label for="validationCustom01">First name</label>
@@ -94,7 +94,7 @@
                         <div class="col-md-4 mb-3">
                             <label for="validationCustom01">Class</label>
                             <select name="class" id="class" class="form-control">
-                            <option value="--choose--">--choose--</option>
+                            <!-- <option value="--choose--">--choose--</option> -->
                             <?php
                                 $stmtclass = $db->conn->prepare("SELECT * FROM `class_tbl` WHERE `class_tbl`.`Status` = 'Active' ");
                                 $stmtclass->execute();
@@ -133,7 +133,7 @@
                         <div class="col-md-4 mb-3">
                             <label for="validationCustom01">Term</label>
                             <select name="term" id="" class="form-control">
-                            <option value="--choose--">--choose--</option>
+                            <!-- <option value="--choose--">--choose--</option> -->
                             <?php
                                 $stmtterm = $db->conn->prepare('SELECT * FROM `term_tbl`');
                                 $stmtterm->execute();
@@ -147,8 +147,7 @@
                             <small class="text-danger" id="term"></small>              
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="validationCustom02">Address</label>
-                            
+                            <label for="validationCustom02">Address</label>                            
                             <input value="<?= $rowstd['Address'] ?>" type="text" name="address" id="" class="form-control">
                             <small class="text-danger" id="address"></small>
                         </div>
@@ -165,12 +164,11 @@
                             <small class="text-danger" id="image"></small>
                         </div> 
                         <div class="col-md-4 mb-3">
-                            <img id="previewImg" src="../../model/students/uploads/<?= $rowstd['Passphort'] ?>" alt="Placeholder" style="height: 40%;width:55%" class="form-control">
+                            <img value="<?= $rowstd['Passphort'] ?>" id="previewImg" src="../../model/students/uploads/<?= $rowstd['Passphort'] ?>" alt="Placeholder" style="height: 40%;width:55%" class="form-control">
                         </div>
                     </div>
 
-
-                    <button class="btn btn-primary" name="newstudent" type="submit">Submit form</button>
+                    <button class="btn btn-info" name="newstudent" type="submit">Update form</button>
                 </form>
 						<!-- Content Row -->
 				</div>
@@ -209,12 +207,12 @@
 
 <script>
 $(document).ready(function () {
-    $('#createStudent').on('submit', function (e) {
+    $('#updateStudent').on('submit', function (e) {
         e.preventDefault();
         $('small.text-danger').text('');
         var formData = new FormData(this);
         $.ajax({
-            url: 'model/students/create.php',
+            url: 'model/students/update.student.php',
             data: formData,//$(this).serialize(),
             contentType: false,
             processData: false,
@@ -226,8 +224,22 @@ $(document).ready(function () {
                         $(`[name="${key}"]`).siblings('small.text-danger').text(value);
                     });
                 } else {
-                    alert(response.success.message);
-                    //alert('Form submitted successfully!');
+                    // alert(response.success.message);
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        }
+                        });
+                        Toast.fire({
+                        icon: "info",
+                        title: response.success.message//"Signed in successfully"
+                    });
                 }
             },
             error: function (xhr, status, error) {

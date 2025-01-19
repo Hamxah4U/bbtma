@@ -214,7 +214,7 @@ img {
               <td><strong style='font-size: 11pt;'>Total Score: <span
                     style='font-size: 14pt;'><?= $totalscore ?></span></strong></td>
               <td><strong style='font-size: 11pt;'>Average: <span
-                    style='font-size: 14pt;'><?= number_format((float)$avg,2,'.',);//sprintf("%.2f",$average); ?></span></strong>
+                    style='font-size: 14pt;'><?php echo number_format((float)$avg,2,'.',);//sprintf("%.2f",$average); ?></span></strong>
               </td>
               <td><strong style='font-size: 11pt;'>Promoted to: _____________</strong></td>
             </tr>
