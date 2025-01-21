@@ -1,7 +1,7 @@
 <?php
 require 'Database.php';
 session_start();
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $errors = [];
     $success = [];
     $session = $_POST['session'];
@@ -24,23 +24,18 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     
     if(empty($errors)){
         if (strtolower($studentregno) == 'all') {
-            $sql = $db->conn->prepare('SELECT * 
-                FROM `student_tbl`
-                JOIN `class_tbl` ON `student_tbl`.`Class` = `class_tbl`.`class_ID`
-                JOIN `session_tbl` ON `session_tbl`.`s_ID` = `student_tbl`.`Session`
-                JOIN `term_tbl` ON `term_tbl`.`id` = `student_tbl`.`Term`
-                WHERE `student_tbl`.`Class` = :class 
-                  AND `student_tbl`.`Session` = :session 
-                  AND `student_tbl`.`Term` = :term');
+            $sql = $db->conn->prepare('SELECT * FROM `score_tbl` WHERE `stdclass` = :stdclass
+              AND `session` = :session 
+              AND `term` = :term');
             $sql->execute([
-                ':class' => $stdclass, 
-                ':session' => $session, 
-                ':term' => $term,
+                ':stdclass' => $stdclass,
+                ':session' => $session,
+                ':term' => $term
             ]);
             $result = $sql->fetchAll(PDO::FETCH_ASSOC);
         
             if (count($result) > 0) {
-                $_SESSION['report_result'] = $result; // Store all results in session
+                $_SESSION['report_result'] = $result;
                 $success['redirect'] = '/allresult';
                 echo json_encode([
                     'status' => true,

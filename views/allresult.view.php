@@ -60,7 +60,8 @@ require 'model/Database.php';
         <input id='printButton' class='btn btn-primary' type='button' value='Print Result' onclick='PrintDoc2()' />
         <?php
           if(isset($_SESSION['report_result'])) {
-            $results = $_SESSION['report_result']; 
+            $_SESSION['report_result'] = array_unique($_SESSION['report_result'], SORT_REGULAR);
+            $results = $_SESSION['report_result'];            
           }else{
             echo "No report data available.";
             exit;
@@ -72,118 +73,176 @@ require 'model/Database.php';
               die('No results found. Please try again.');
             }
             
-            $students = $_SESSION['report_result'];
-            
-            foreach ($students as $student) {
-                $studentID = $student['stu_ID'];
-                $studentName = ucwords(strtolower($student['FirstName'] . " " . $student['OtherName'] . " " . $student['Surname']));
-                $regNo = $student['Reg_no'];
-                $className = $student['Class_Name'];
-                $session = $student['Session'];
-                $term = $student['Term'];
-                $dob = date('d-m-Y', strtotime($student['DOB']));
-                $passport = $student['Passphort'];
-            
-                echo "
-                <div id='printResult'>
-                    <center>
-                        <img src='../../img/bbtmaReport.png' style='width: 100%;'>
-                        <table style='width:70%; margin: auto;' id='mytablehead'>
-                            <tbody>
-                                <tr>
-                                    <td><strong>$studentName</strong></td>
-                                    <td><strong>$regNo</strong></td>
-                                    <td><strong>$className</strong></td>
-                                    <td><strong>$session</strong></td>
-                                    <td><strong>$term</strong></td>
-                                    <td>
-                                        <center>
-                                            <img src='../../model/students/uploads/$passport' alt='Photo' class='img-thumbnail' style='height: 80px; width: 100px;'>
-                                            <br/> <i style='font-size: 11pt;'>$dob</i>
-                                        </center>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </center>
-                ";
-            
-                $stmt = $db->conn->prepare('SELECT s.*, sub.Subject_name 
-                    FROM score_tbl s
-                    JOIN subject_tbl sub ON s.subject = sub.sub_ID
-                    WHERE s.stdID = :stdID AND s.session = :session AND s.term = :term
-                ');
-                $stmt->execute([
-                    ':stdID' => $studentID,
-                    ':session' => $student['Session'],
-                    ':term' => $student['Term'],
+            $students = $_SESSION['report_result'];           
+            foreach($students as $index => $student):
+
+              $stmtposition = $db->conn->prepare('SELECT SUM(tscore) AS totalscore, s.stdID, s.Reg_no, s.stdclass, s.session, s.term
+                  FROM score_tbl s
+                  WHERE s.session = :session AND s.term = :term AND s.stdclass = :stdclass/*  AND stdID = :stdID  */
+                  GROUP BY s.stdID, s.Reg_no, s.stdclass, s.session, s.term
+                  ORDER BY totalscore DESC');
+                
+                $stmtposition->execute([
+                  //':stdID' => $student['stdID'],
+                  ':session' => $student['session'],
+                  ':term' => $student['term'],
+                  ':stdclass' => $student['stdclass']
                 ]);
-                $scores = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
-                echo "<table class='table table-striped' style='width:80%;' id='tableContent'>
-                    <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>Subject</th>
-                        <th>1<sup>st</sup> Test</th>
-                        <th>2<sup>nd</sup> Test</th>
-                        <th>3<sup>rd</sup> Test</th>
-                        <th>Exam</th>
-                        <th>Total</th>
-                        <th>Grade</th>
-                        <th>Remark</th>
-                    </tr>
-                    </thead>
-                    <tbody>";
-            
-                $totalscore = 0;
-                $totalsubject = 0;
-            
-                foreach ($scores as $index => $score) {
-                    $totalscore += $score['tscore'];
-                    $totalsubject++;
-                    echo "<tr>
-                        <td>" . ($index + 1) . "</td>
-                        <td>" . htmlspecialchars($score['Subject_name']) . "</td>
-                        <td>" . htmlspecialchars($score['first']) . "</td>
-                        <td>" . htmlspecialchars($score['second']) . "</td>
-                        <td>" . htmlspecialchars($score['third']) . "</td>
-                        <td>" . htmlspecialchars($score['exam']) . "</td>
-                        <td>" . htmlspecialchars($score['tscore']) . "</td>
-                        //<td>" . htmlspecialchars($score['grade']) . "</td>
-                        //<td>" . htmlspecialchars($score['remark']) . "</td>
-                    </tr>";                    
+    
+                $studentPositions = $stmtposition->fetchAll(PDO::FETCH_ASSOC);
+                
+                $studentRanks = [];
+                foreach ($studentPositions as $index => $studentPosition) {
+                  $studentRanks[$studentPosition['stdID']] = $index + 1; 
                 }
 
-                foreach ($results as $index => $row) {
-                  $sql = $db->conn->prepare('SELECT Subject_name FROM subject_tbl WHERE sub_ID = :subject_id');
-                  $sql->execute([':subject_id' => $row['subject']]);
-                  $row2 = $sql->fetch(PDO::FETCH_ASSOC);
-                  $subjectName = $row2 ? htmlspecialchars($row2['Subject_name']) : "Subject not found";
+              $stmt = $db->conn->prepare('SELECT * FROM `student_tbl`WHERE `stu_ID` = :stu_ID ');
+              $stmt->execute([':stu_ID' => $student['stdID']]);
+              $studentInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                  $totalscore += $row['tscore'];
-                  $totalsubject = $index + 1;              
-                    
-                  $studentposition = isset($studentRanks[$row['stdID']]) ? $studentRanks[$row['stdID']] : 'N/A';
+              $sessionsql = $db->conn->prepare('SELECT * FROM `session_tbl` WHERE s_ID = :id');
+              $sessionsql->execute([':id' => $student['session'] ]);
+              $session = $sessionsql->fetchAll(PDO::FETCH_ASSOC);
 
-                  echo "<tr>";
-                  echo "<td>" . ($index + 1) . "</td>";
-                  echo "<td>" . htmlspecialchars($subjectName) . "</td>";
-                  echo "<td>" . htmlspecialchars($row['first']) . "</td>";
-                  echo "<td>" . htmlspecialchars($row['second']) . "</td>";
-                  echo "<td>" . htmlspecialchars($row['third']) . "</td>";
-                  echo "<td>" . htmlspecialchars($row['exam']) . "</td>";
-                  echo "<td>" . htmlspecialchars($row['tscore']) . "</td>";
-                  echo "<td>" . htmlspecialchars(grade($row['tscore'])) . "</td>"; 
-                  echo "<td>" . htmlspecialchars(remark($row['tscore'])) . "</td>";  
-                  echo "</tr>";              
-                }  
-            
-                echo "</tbody></table></div>";
-            }
-          ?>
+              $termsql = $db->conn->prepare('SELECT * FROM `term_tbl` WHERE id = :id');
+              $termsql->execute([':id' => $student['term']]);
+              $terms = $termsql->fetchAll(PDO::FETCH_ASSOC);
+
+              $classSql = $db->conn->prepare('SELECT * FROM `class_tbl` WHERE class_ID = :class_ID');
+              $classSql->execute([':class_ID' => $student['stdclass']]);
+              $classes = $classSql->fetchAll(PDO::FETCH_ASSOC);
+
+              $subjectsql = $db->conn->prepare('SELECT s.*, sub.Subject_name 
+                    FROM score_tbl s
+                    JOIN subject_tbl sub ON s.subject = sub.sub_ID
+                    WHERE s.stdID = :stdID AND s.session = :session AND s.term = :term');
+              $subjectsql->execute([
+                ':stdID' => $student['stdID'],
+                ':session' => $student['session'],
+                ':term' => $student['term'],
+              ]);
+              $subjects = $subjectsql->fetchAll(PDO::FETCH_ASSOC);
+            ?>
+              <div id='printResult'>
+                  <center>
+                    <img src='../../img/bbtmaReport.png' style='width: 100%;'>
+                    <table style='width:70%; margin: auto;' id='mytablehead'>
+                      <tbody>
+                        <tr>
+                          <td><strong>
+                            <?php
+                              foreach($studentInfo as $stdinfo){
+                                echo ucwords(strtolower($stdinfo['FirstName'] . " " . $stdinfo['OtherName'] . " " . $stdinfo['Surname']));
+                            } ?>
+                          </strong></td>
+                          <td><strong><?= $student['Reg_no'] ?></strong></td>
+                          <td><strong><?php 
+                            foreach($classes as $class){
+                              echo $class['Class_Name'];
+                            }
+                             ?></strong></td>
+                          <td><strong>
+                            <?php  
+                              foreach($session as $sess){
+                                echo $sess['Session'];
+                              }
+                            ?></strong></td>
+                          <td><strong>
+                            <?php
+                              foreach($terms as $term){
+                                echo $term['term'];
+                              }
+                            $student['term'] ?></strong></td>
+                          <td>
+                            <center>
+                              <img src='../../model/students/uploads/<?= $stdinfo['Passphort'] ?>' alt='passport' class='img-thumbnail' style='height: 80px; width: 100px;'>
+                              <br/> <i style='font-size: 11pt;'><?= date('d-m-Y', strtotime($stdinfo['DOB'])) ?></i>
+                            </center>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    <table class="table table-striped" style="width:80%;" id="tableContent">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Subject</th>
+                          <th>1<sup>st</sup> Test</th>
+                          <th>2<sup>nd</sup> Test</th>
+                          <th>3<sup>rd</sup> Test</th>
+                          <th>Exam</th>
+                          <th>Total</th>
+                          <th>Grade</th>
+                          <th>Remark</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php
+                           $totalscore = 0;
+                           $totalsubject = 0;
+                           $studentposition = 0;
+                          foreach ($subjects  as $index => $row):
+                            $totalscore += $row['tscore'];
+                            $totalsubject = $index + 1;
+                            $studentposition = isset($studentRanks[$row['stdID']]) ? $studentRanks[$row['stdID']] : 'N/A';
+                          ?>
+                          <tr>
+                            <td><?= $index + 1 ?></td>
+                            <td><?= $row['Subject_name'] ?></td>
+                            <td><?= $row['first'] ?></td>
+                            <td><?= $row['second'] ?></td>
+                            <td><?= $row['third'] ?></td>
+                            <td><?= $row['exam'] ?></td>
+                            <td><?= $row['tscore'] ?></td>
+                            <td><?= grade($row['tscore'] )?></td>
+                            <td><?= remark($row['tscore']) ?></td>
+                          </tr>
+                        <?php endforeach ?>
+                      </tbody>  
+                    </table>
+                  </center>
+                  <table style="width:80%; margin: auto;">
+                    <?php
+                     
+
+
+                      $avg = $totalscore/$totalsubject;  
+                      $totalStudent = $db->conn->prepare('SELECT * FROM `positio` s 
+                      WHERE s.session = :session AND s.term = :term AND s.stdclass = :stdclass') ;
+                      $totalStudent->execute([
+                        ':session' => $row['session'],  
+                        ':term' => $row['term'],        
+                        ':stdclass' => $row['stdclass'],
+                      ]);
+                      $tstudent = $totalStudent->rowCount();
+                    ?>
+                    <tr>
+                      <td><strong style='font-size: 12pt;'>Position: <span style='font-size: 14pt;'><?= $studentposition.position($studentposition);?></span>
+                          Out of <span style='font-size: 14pt;'><?= $tstudent;?></span> Pupils</strong></td>
+                      <td><strong style='font-size: 11pt;'>Total Score: <span
+                            style='font-size: 14pt;'><?= $totalscore ?></span></strong></td>
+                      <td><strong style='font-size: 11pt;'>Average: <span
+                            style='font-size: 14pt;'><?php echo number_format((float)$avg,2,'.',);//sprintf("%.2f",$average); ?></span></strong>
+                      </td>
+                      <td><strong style='font-size: 11pt;'>Promoted to: _____________</strong></td>
+                    </tr>
+                    <tr>
+                      <td><strong style='font-size: 11pt;'>Closing Date _________</strong></td>
+                      <td><strong style='font-size: 11pt;'>Resumption Date _________</strong></td>
+                      <td colspan="2"><strong style='font-size: 11pt;'>Class Teacher Comment:_____________</strong></td>
+                    </tr>
+                    <tr>
+                      <td><strong style='font-size: 11pt;'>Next Term School Fees:_________</strong></td>
+                      <td><strong style='font-size: 11pt;'>Pre-Bal:_________</strong></td>
+                      <td><strong style='font-size: 11pt;'>Net Bal___________</strong></td>
+                      <td>&nbsp;</td>
+                    </tr>
+                  </table>
+              </div>
+            <?php endforeach ?>
         </div>
       </div>
     </div>
-    <?php  require 'views/partials/footer.php'; ?>
+    <?php // require 'views/partials/footer.php'; ?>
 

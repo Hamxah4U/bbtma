@@ -26,6 +26,9 @@
         .text-danger{
             font-style: italic;
         }
+        .container-fluid{
+            max-height: 20px;
+        }
     </style>
 
 </head>

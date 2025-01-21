@@ -233,7 +233,6 @@ img {
         </div>
       </div>
     </div>
-    <?php  require 'views/partials/footer.php'; ?>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/printThis/1.15.0/printThis.min.js"></script>
@@ -260,3 +259,5 @@ img {
       });
     });
     </script>
+
+<?php  //require 'views/partials/footer.php'; ?>

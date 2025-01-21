@@ -105,29 +105,29 @@
 <script>
 	$(document).ready(function(){
     $('#adminReport').on('submit', function(e){
-        e.preventDefault();
-        $('.text-danger').text('');
-        $.ajax({
-            url: 'model/student.report.php',
-            type: 'POST',
-            dataType: 'JSON',
-            data: $(this).serialize(),
-            success: function(response){
-                if(! response.status){
-                    $('#errorSession').text(response.errors.session || '');
-                    $('#errorTerm').text(response.errors.term || '');
-                    $('#errorClass').text(response.errors.class || '');
-                    $('#errorRegNo').text(response.errors.studentregno || '');
-                } else {
-									setTimeout(function(){
-										window.location.href = response.success.redirect
-									}, 1000)
-                }
-            },
-            error: function(xhr, status, error){
-                alert('Error: ' + xhr + status + error);
-            }
-        })
+			e.preventDefault();
+			$('.text-danger').text('');
+			$.ajax({
+				url: 'model/student.report.php',
+				type: 'POST',
+				dataType: 'JSON',
+				data: $(this).serialize(),
+				success: function(response){
+					if(! response.status){
+						$('#errorSession').text(response.errors.session || '');
+						$('#errorTerm').text(response.errors.term || '');
+						$('#errorClass').text(response.errors.class || '');
+						$('#errorRegNo').text(response.errors.studentregno || '');
+					}else {
+						setTimeout(function(){
+							window.location.href = response.success.redirect
+						}, 1000)
+					}
+				},
+				error: function(xhr, status, error){
+					alert('Error: ' + xhr + status + error);
+				}
+			})
     })
 	});
 </script>

@@ -182,30 +182,6 @@
 ?>
 
 <script>
-    $(document).ready(function () {
-    $('#class').on('change', function () {
-        const classId = $(this).val();
-
-        if (classId) {
-            $.ajax({
-                url: 'model/ajax/regno.php',
-                type: 'POST',
-                data: { class_id: classId },
-                success: function (response) {
-                    $('#reg_no').val(response);
-                },
-                error: function () {
-                    alert('Failed to fetch registration number.');
-                },
-            });
-        } else {
-            $('#reg_no').val('');
-        }
-    });
-    }); 
-</script>
-
-<script>
 $(document).ready(function () {
     $('#updateStudent').on('submit', function (e) {
         e.preventDefault();
@@ -252,51 +228,7 @@ $(document).ready(function () {
 </script>
 
 <script>
-	$(document).ready(function(){
-    $('#userForm').on('submit', function(e){
-			e.preventDefault();
-			$.ajax({
-				url: 'model/user.form.php',
-				dataType: 'JSON',
-				data: $(this).serialize(),
-				type: 'POST',
-				success: function(response){
-					if(response.status === false){
-						$('#errorFname').text(response.errors.fname || '');
-						$('#errorEmail').text(response.errors.email || '');
-						$('#errorPhone').text(response.errors.phone || '');
-						$('#errorUnit').text(response.errors.unit || '');
-						$('#errorRole').text(response.errors.role || '');
-						$('#errorEmail').text(response.errors.email || response.errors.emailExist || ''); 
-						$('#errorPhone').text(response.errors.phone || response.errors.phoneExist || '');
-					}else{
-						const Toast = Swal.mixin({
-							toast: true,
-							position: "top-end",
-							showConfirmButton: false,
-							timer: 2000,
-							timerProgressBar: true,
-							didOpen: (toast) => {
-								toast.onmouseenter = Swal.stopTimer;
-								toast.onmouseleave = Swal.resumeTimer;
-							}
-							});
-							Toast.fire({
-							icon: "success",
-							title: response.success.success//"Signed in successfully"
-						});
-						$('#usersTable').DataTable().ajax.reload();
-						$('#errorFname, #errorEmail, #errorPhone, #errorUnit, #errorRole, #errorEmail,  #errorPhone, #modalUser').text('');
-						$('#modalUser').modal('hide');
-						$('#userForm')[0].reset();
-					}
-				},
-					error: function(xhr, status, error){
-						alert('Error: ' + xhr.status + ' - ' + error);
-					}
-			});
-    });
-});
+	
 </script>
 <script>
     function previewFile(input){
