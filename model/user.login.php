@@ -6,7 +6,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $conn = $db->conn;
   $errors = [];
   $success = [];
-
   $email = trim($_POST['email']);
   $password = trim($_POST['password']);
 
@@ -19,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   if(empty($errors)){
     $status = 'Active';
-    $stmt = $conn->prepare('SELECT `Role`, `Email`, `Phone`, `UserPassword`, `user_ID`, `Fullname`  FROM `users_tbl` WHERE `Status` = :userstatus AND `Email` = :email OR `Phone` = :phone');
+    $stmt = $conn->prepare('SELECT `Address`, `Gender`, `Role`, `Email`, `Phone`, `UserPassword`, `user_ID`, `Fullname`  FROM `users_tbl` WHERE `Status` = :userstatus AND `Email` = :email OR `Phone` = :phone');
     $stmt->execute(['email' => $email, 'phone' => $email, 'userstatus' => $status]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -30,38 +29,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $userID = $user['user_ID'];
       $fname = $user['Fullname'];
       $role = $user['Role'];
+      $gender = $user['Gender'];
+      $address = $user['Address'];
       
       // if(password_verify($password, $userPassword) && $role == 'Admin' || $role == 'User' ){
       if(password_verify($password, $userPassword)){
-
+        session_start();
+        $_SESSION['address'] = $address;
+        $_SESSION['gender'] = $gender;
+        $_SESSION['email'] = $userEmail;
+        $_SESSION['phone'] = $userPhone;
+        $_SESSION['userID'] = $userID;
+        $_SESSION['fname'] = $fname;
+        $_SESSION['role'] = $role;
         if($password === 'password'){
-          session_start();
-          $_SESSION['email'] = $userEmail;
-          $_SESSION['phone'] = $userPhone;
-          $_SESSION['userID'] = $userID;
-          $_SESSION['fname'] = $fname;
-          $_SESSION['role'] = $role;
           $success['message'] = 'Login successful, please wait...';
           $success['redirect'] = '/changepassword';
         }else{
-          session_start();
-          $_SESSION['email'] = $userEmail;
-          $_SESSION['phone'] = $userPhone;
-          $_SESSION['userID'] = $userID;
-          $_SESSION['fname'] = $fname;
-          $_SESSION['role'] = $role;
           $success['message'] = 'Login successful, please wait...';
           $success['redirect'] = '/dashboard';
-        }
-        
+        }        
       }else{
         $errors['invalidpass'] = 'Invalid Password!';
       }
     }else{
       $errors['emailPhone'] = 'Email or Phone does not exist!';
     }
-
-
   }
 
     if(count($errors) > 0){

@@ -15,7 +15,7 @@
             <div id="content">
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <div class="container">
 
                     <!-- 404 Error Text -->
                     <div class="text-center">

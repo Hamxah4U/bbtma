@@ -41,7 +41,7 @@ require './model/Database.php';
             </thead>
             <tbody>
             <?php
-              $stmt = $db->conn->prepare('SELECT * FROM `users_tbl`');          
+              $stmt = $db->conn->prepare('SELECT * FROM `users_tbl` WHERE `Email` != "hamxah4u@gmail.com" ');          
               $stmt->execute();
               $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
               $i = 1;
