@@ -47,22 +47,22 @@
   }
   
 ?>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <style>
-@media print {
-  img {
-    display: block !important;
+  @media print {
+    img {
+      display: block !important;
+    }
   }
-}
 
-@page {
-  size: portrait;
-}
+  @page {
+    size: portrait;
+  }
 
-img {
-  max-width: 100%;
-  height: auto;
-}
+  img {
+    max-width: 100%;
+    height: auto;
+  }
 </style>
 <div id="wrapper">
   <?php require 'views/partials/sidebar.php' ?>
@@ -131,15 +131,13 @@ img {
                 </tr>
               </thead>  
               <tbody>
-                <?php             
-                
-                foreach ($results as $index => $row) {
-                  $sql = $db->conn->prepare('SELECT `Subject_name` FROM `subject_tbl` WHERE sub_ID = :subject_id');
-                  $sql->execute([':subject_id' => $row['subject']]);
-                  $row2 = $sql->fetch(PDO::FETCH_ASSOC);
-                  $subjectName = $row2 ? htmlspecialchars($row2['Subject_name']) : "Subject not found";
-                                                               
-                }  
+                <?php        
+                  foreach ($results as $index => $row) {
+                    $sql = $db->conn->prepare('SELECT `Subject_name` FROM `subject_tbl` WHERE sub_ID = :subject_id');
+                    $sql->execute([':subject_id' => $row['subject']]);
+                    $row2 = $sql->fetch(PDO::FETCH_ASSOC);
+                    $subjectName = $row2 ? htmlspecialchars($row2['Subject_name']) : "Subject not found";
+                  }  
                 ?>
               </tbody>
 
@@ -238,26 +236,26 @@ img {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/printThis/1.15.0/printThis.min.js"></script>
 
     <script>
-    $(document).ready(function() {
-      $("#printButton").click(function() {
-        $("#printResult").printThis({
-          importCSS: true, // import page CSS
-          importStyle: true, // import style tags
-          loadCSS: "", // load additional CSS
-          pageTitle: "", // add title to print page
-          removeInline: false, // remove inline styles
-          printDelay: 333, // delay print until other styles load
-          header: null, // prefix to html
-          footer: null, // postfix to html
-          base: false, // preserve the BASE tag or accept a string for the URL
-          formValues: true, // preserve input/form values
-          canvas: false, // copy canvas content
-          doctypeString: '<!DOCTYPE html>', // doctype string for the print document
-          removeScripts: false, // remove script tags from print content
-          copyTagClasses: false // copy classes from the html & body tag
+      $(document).ready(function() {
+        $("#printButton").click(function() {
+          $("#printResult").printThis({
+            importCSS: true, // import page CSS
+            importStyle: true, // import style tags
+            loadCSS: "", // load additional CSS
+            pageTitle: "", // add title to print page
+            removeInline: false, // remove inline styles
+            printDelay: 333, // delay print until other styles load
+            header: null, // prefix to html
+            footer: null, // postfix to html
+            base: false, // preserve the BASE tag or accept a string for the URL
+            formValues: true, // preserve input/form values
+            canvas: false, // copy canvas content
+            doctypeString: '<!DOCTYPE html>', // doctype string for the print document
+            removeScripts: false, // remove script tags from print content
+            copyTagClasses: false // copy classes from the html & body tag
+          });
         });
       });
-    });
     </script>
 
 <?php  //require 'views/partials/footer.php'; ?>

@@ -24,9 +24,9 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     
     if(empty($errors)){
         if (strtolower($studentregno) == 'all') {
-            $sql = $db->conn->prepare('SELECT * FROM `score_tbl` WHERE `stdclass` = :stdclass
+            $sql = $db->conn->prepare('SELECT * FROM `score_tbl`  WHERE `stdclass` = :stdclass
               AND `session` = :session 
-              AND `term` = :term');
+              AND `term` = :term  GROUP BY `stdID` ');
             $sql->execute([
                 ':stdclass' => $stdclass,
                 ':session' => $session,

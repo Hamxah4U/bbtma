@@ -1,3 +1,9 @@
+<style>
+    strong{
+        font-size: 12pt;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+</style>
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
@@ -17,10 +23,10 @@
     <li class="nav-item active">
         <a class="nav-link" href="/dashboard">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            Dashboard</a>
+            <strong>Dashboard</strong></a>
     </li>
 
-    <li class="nav-item">
+    <li class="nav-item active">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
             aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-cog"></i>
@@ -30,12 +36,12 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <!-- <h6 class="collapse-header">Custom Components:</h6> -->
                 <a class="collapse-item" href="/adduser"><strong>Add User</strong></a>
-                <a class="collapse-item" href="/manageuser"><strong>Manage User</strong></a>
+                <a class="collapse-item" href="#"><strong>Manage Applicant</strong></a>
             </div>
         </div>
     </li>
 
-    <li class="nav-item">
+    <li class="nav-item active">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
             aria-expanded="true" aria-controls="collapseUtilities">
             <i class="icofont-group-students"></i>
@@ -46,49 +52,49 @@
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
-                <a class="collapse-item" href="/addstudent">Add Student</a>
-                <a class="collapse-item" href="/managstudent">Manage Student</a>
-                <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                <a class="collapse-item" href="utilities-other.html">Other</a>
+                <a class="collapse-item" href="/addstudent"><strong>Add Student</strong></a>
+                <a class="collapse-item" href="/managstudent"><strong>Manage Student</strong></a>
+                <a class="collapse-item" href="/promotion"><strong>Manage Promotion</strong></a>
+                <a class="collapse-item" href="#"><strong>Attendance</strong></a>
             </div>
         </div>
     </li>
 
-    <li class="nav-item">
+    <li class="nav-item active">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#calender"
             aria-expanded="true" aria-controls="calender">
-            <i class="fas fa-fw fa-calendar"></i>
+            <i class="icofont-ui-calendar"></i>
            <strong>Calendar</strong>
         </a>
         <div id="calender" class="collapse" aria-labelledby="headingUtilities"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
-                <a class="collapse-item" href="/calender">Manage Calendar</a>
+                <a class="collapse-item" href="/calender"><strong>Manage Calendar</strong></a>
                 <!-- <a class="collapse-item" href="utilities-border.html">Manage Term</a> -->
             </div>
         </div>
     </li>
 
-    <li class="nav-item">
+    <li class="nav-item active">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#exam"
             aria-expanded="true" aria-controls="exam">
-            <i class="fas fa-fw fa-certificate"></i>
+            <i class="icofont-certificate-alt-1"></i>
            <strong>Examination</strong>
         </a>
         <div id="exam" class="collapse" aria-labelledby="headingUtilities"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
-                 <a href="/subjectallocation" class="collapse-item">Subject Allocation</a>
-                <a class="collapse-item" href="/examination">Add CA/Exam</a>
-                <a class="collapse-item" href="utilities-border.html">Manage Result</a>
-                <a class="collapse-item" href="utilities-border.html">View Result</a>
+                 <a href="/subjectallocation" class="collapse-item"><strong>Subject Allocation</strong></a>
+                <a class="collapse-item" href="/examination"><strong>Add CA/Exam</strong></a>
+                <!-- <a class="collapse-item" href="utilities-border.html"><strong>Manage Result</strong></a>
+                <a class="collapse-item" href="utilities-border.html">View Result</a> -->
             </div>
         </div>
     </li>
 
-    <li class="nav-item">
+    <li class="nav-item active">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#promotion"
             aria-expanded="true" aria-controls="promotion">
             <i class="icofont-exchange"></i>
@@ -98,37 +104,37 @@
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
-                <a class="collapse-item" href="utilities-color.html">Manage Promotion</a>
+                <a class="collapse-item" href="#">Manage Promotion</a>
             </div>
         </div>
     </li>
 
-    <li class="nav-item">
+    <li class="nav-item active">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#finance"
             aria-expanded="true" aria-controls="finance">
-            <i class="icofont-money"></i>
-           <strong>Finance/Accountion</strong>
+            <i class="fas fa-money-bill"></i>
+           <strong>Finance</strong>
         </a>
         <div id="finance" class="collapse" aria-labelledby="headingUtilities"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
-                <a class="collapse-item" href="utilities-color.html">Manage Promotion</a>
+                <a class="collapse-item" href="#"><strong>Manage School Fees</strong></a>
             </div>
         </div>
     </li>
 
-    <li class="nav-item">
+    <li class="nav-item active">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#reportsheet"
             aria-expanded="true" aria-controls="reportsheet">
-            <i class="fas fa-fw fa-wrench"></i>
+            <i class="icofont-pie-chart"></i>
            <strong>Report Sheet</strong>
         </a>
         <div id="reportsheet" class="collapse" aria-labelledby="headingUtilities"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
-                <a class="collapse-item" href="/report">Generate Report</a>
+                <a class="collapse-item" href="/report"><strong>Generate Report</strong></a>
             </div>
         </div>
     </li>
