@@ -32,7 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $gender = $user['Gender'];
       $address = $user['Address'];
       
-      // if(password_verify($password, $userPassword) && $role == 'Admin' || $role == 'User' ){
       if(password_verify($password, $userPassword)){
         session_start();
         $_SESSION['address'] = $address;

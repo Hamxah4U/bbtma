@@ -160,15 +160,20 @@
                     <div class="form-row">
                         <div class="col-md-4 mb-3">
                             <label for="">Passport</label>
-                            <input type="file" name="image" onchange="previewFile(this);" style="display: block;" class="form-contro">
+                            <input value="<?= $rowstd['Passphort'] ?>" type="file" name="image" onchange="previewFile(this);" style="display: block;" class="form-contro">
                             <small class="text-danger" id="image"></small>
                         </div> 
-                        <div class="col-md-4 mb-3">
-                            <img value="<?= $rowstd['Passphort'] ?>" id="previewImg" src="../../model/students/uploads/<?= $rowstd['Passphort'] ?>" alt="Placeholder" style="height: 40%;width:55%" class="form-control">
+                        <div class="col-md-4 mb-0">
+                            <img value="<?= $rowstd['Passphort'] ?>" id="previewImg" src="../../model/students/uploads/<?= $rowstd['Passphort'] ?>" alt="Placeholder" style="height: 30%;width:35%" class="form-control">
+                        </div>
+
+                        <div class="col-md-4 col-12 mb-0">
+                            <button class="btn btn-info mt-3 w-100" name="newstudent" type="submit">Update form</button>
                         </div>
                     </div>
 
-                    <button class="btn btn-info" name="newstudent" type="submit">Update form</button>
+                   
+                
                 </form>
 						<!-- Content Row -->
 				</div>
@@ -198,6 +203,7 @@ $(document).ready(function () {
                 if (!response.status) {                    
                     $.each(response.errors, function (key, value) {
                         $(`[name="${key}"]`).siblings('small.text-danger').text(value);
+                        $(`[name="${key}"]`).closest('.form-floating').find('small.text-danger').text(value);
                     });
                 } else {
                     // alert(response.success.message);

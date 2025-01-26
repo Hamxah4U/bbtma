@@ -73,12 +73,24 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             }
         }
         
-        if (count($errors) > 0) {
+       /*  if (count($errors) > 0) {
             echo json_encode([
                 'status' => false,
                 'errors' => $errors
             ]);
-        }
+        } */
+    }
+
+    if(count($errors) > 0){
+        echo json_encode([
+            'status' => false,
+            'errors' => $errors
+        ]);
+    }else{
+        echo json_encode([
+            'status' => true,
+            'success' => $success
+        ]);
     }
 }
 ?>

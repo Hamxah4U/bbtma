@@ -29,27 +29,28 @@
     }
 
     if (empty($errors)) {
-      $stmt = $db->conn->prepare("UPDATE users_tbl SET 
-          Fullname = :fname, 
-          Phone = :phone, 
-          Address = :address,
-          Email = :email
-          WHERE user_ID = :staffID");
-          
-      $result = $stmt->execute([
-          ':fname' => $fname,
-          ':phone' => $phone,
-          ':address' => $address,
-          ':email' => $email,
-          ':staffID' => $id
-      ]);
+      session_start();
+      try {
+          $stmt = $db->conn->prepare("UPDATE `users_tbl` SET `Gender` = :gender, `Address` = :Address,`Phone` = :Phone, `Fullname` = :fname WHERE `users_tbl`.`user_ID` = :userID");
   
-      if ($result) {
-          $success['message'] = 'Profile updated successfully!';
-      } else {
-          $errors[] = 'Error updating profile. Please try again.';
+          $result = $stmt->execute([
+              ':fname' => $fname,
+              ':Phone' => $phone,
+              ':Address' => $address,
+              ':gender' => $gender,
+              ':userID' => $_SESSION['userID']
+          ]);
+  
+          if ($result) {
+              $success['message'] = 'Profile updated successfully!';
+          } else {
+              $errors[] = 'Error updating profile. Please try again.';
+          }
+      } catch (PDOException $e) {
+          $errors[] = 'Database error: ' . $e->getMessage();
       }
   }
+  
 
     if(count($errors) > 0){
       echo json_encode([

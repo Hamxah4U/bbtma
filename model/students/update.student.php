@@ -25,22 +25,61 @@
       $errors['fname'] = 'Required!';
     }
 
-    $fileName = null;
     if (!empty($featuredImage['name'])) {
       $targetDir = __DIR__ . '/uploads/';
-      
       $fileType = strtolower(pathinfo($featuredImage['name'], PATHINFO_EXTENSION));
       $fileName = uniqid('img_', true) . '.' . $fileType;
       $targetFilePath = $targetDir . $fileName;
   
       $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
       if (!in_array($fileType, $allowedTypes)) {
-          $errors['image'] = 'Only JPG, JPEG, PNG, and GIF files are allowed!'.$targetDir;
+          $errors['image'] = 'Only JPG, JPEG, PNG, and GIF files are allowed!';
+      } else {
+          // Fetch the existing image from the database
+          $stmt = $db->conn->prepare("SELECT Passphort FROM student_tbl WHERE stu_ID = ?");
+          $stmt->execute([$stdID]);
+          $row = $stmt->fetch(PDO::FETCH_ASSOC);
+  
+          // Check if there is an existing image
+          if (!empty($row['Passphort'])) {
+              $existingFilePath = $targetDir . $row['Passphort'];
+              if (file_exists($existingFilePath)) {
+                  // Delete the existing file
+                  unlink($existingFilePath);
+              }
+          }
+  
+          // Upload the new file
+          if (!move_uploaded_file($featuredImage['tmp_name'], $targetFilePath)) {
+              $errors['image'] = 'Failed to upload the image!';
+          }
+      }
+  } else {
+      // Retain the existing image if no new image is provided
+      $stmt = $db->conn->prepare("SELECT Passphort FROM student_tbl WHERE stu_ID = ?");
+      $stmt->execute([$stdID]);
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+      $fileName = $row['Passphort'];
+  }
+  
+
+    /* if (!empty($featuredImage['name'])) {
+      $targetDir = __DIR__ . '/uploads/';
+      $fileType = strtolower(pathinfo($featuredImage['name'], PATHINFO_EXTENSION));
+      $fileName = uniqid('img_', true) . '.' . $fileType;
+      $targetFilePath = $targetDir . $fileName;
+
+      $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
+      if (!in_array($fileType, $allowedTypes)) {
+          $errors['image'] = 'Only JPG, JPEG, PNG, and GIF files are allowed!';
       } elseif (!move_uploaded_file($featuredImage['tmp_name'], $targetFilePath)) {
           $errors['image'] = 'Failed to upload the image!';
       }
-      } /* else {
-      $errors['image'] = 'Image is required!';
+    } else {
+      $stmt = $db->conn->prepare("SELECT Passphort FROM student_tbl WHERE stu_ID = ?");
+      $stmt->execute([$stdID]);
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+      $fileName = $row['Passphort'];
     } */
 
     if(empty($errors)){

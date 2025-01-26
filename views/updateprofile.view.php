@@ -27,12 +27,7 @@
 				<!-- Begin Page Content -->
 				<div class="container-fluid">
 
-						<!-- Page Heading -->
-						<!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
-								<h1 class="h3 mb-0 text-gray-800"></h1>
-							<button class="btn btn-primary" type="button" data-target="#modalUser" data-toggle="modal">Add User</button>
-						</div> -->
-						<!-- Content Row -->
+						
           <form method="POST" id="updatestaff" enctype="multipart/form-data">
             <input type="hidden" name="stdID" id="" value="<?= $_SESSION['userID'] ?>">
               <div class="form-row">
@@ -48,7 +43,7 @@
                   </div>
                   <div class="col-md-4 mb-3">
                       <label for="validationCustom02">Phone</label>
-                      <input value="<?= $_SESSION['phone'] ?>" type="number" name="phone" class="form-control">
+                      <input value="<?= $_SESSION['phone'] ?>" type="text" name="phone" class="form-control">
                       <small class="text-danger" id="phone"></small>
                   </div>                
               </div>
@@ -77,7 +72,7 @@
                         $rolesql->execute([':role' => $roleuser]);
                         $rolerow = $rolesql->fetch(PDO::FETCH_ASSOC);
                       ?>
-                      <input readonly value="<?= $rolerow['role'] ?>" type="text" name="phone" class="form-control" >
+                      <input readonly value="<?= $rolerow['role'] ?>" type="text" name="role" class="form-control" >
                       <small class="text-danger" id="phone"></small>
                   </div>
                   <div class="col-md-4 mb-3">
