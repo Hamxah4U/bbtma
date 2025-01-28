@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['gender'] = $gender;
         $_SESSION['email'] = $userEmail;
         $_SESSION['phone'] = $userPhone;
-        $_SESSION['userID'] = $userID;
+        $_SESSION['userID'] = $userID;  
         $_SESSION['fname'] = $fname;
         $_SESSION['role'] = $role;
         if($password === 'password'){

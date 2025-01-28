@@ -32,10 +32,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       foreach ($stuid as $index => $studentID) {
         $reg = $regno[$index] ?? '';
-        $first = $ftest[$index] ?? 0;
-        $second = $stest[$index] ?? 0;
-        $third = $rtest[$index] ?? 0;
-        $examScore = $exam[$index] ?? 0;
+        $first = $ftest[$index] ?? null;
+        $second = $stest[$index] ?? null;
+        $third = $rtest[$index] ?? null;
+        $examScore = $exam[$index] ?? null;
 
         // score record  exists
         $checkStmt = $db->conn->prepare("SELECT id FROM score_tbl WHERE stdID = :stdID AND stdclass = :stdclass AND `subject` = :subject AND `session` = :session AND term = :term");

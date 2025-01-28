@@ -26,7 +26,10 @@ $routes = [
     '/generatepdf' => 'controllers/generatepdf.php',
     '/allresult' => 'controllers/allresult.php',
     '/promotion' => 'controllers/promotion.php',
-    '/updateprofile' => 'controllers/updateprofile.php'
+    '/updateprofile' => 'controllers/updateprofile.php',
+    '/schoolfees' => 'controllers/schoolfees.php',
+    '/payschoolfees' => 'controllers/payschoolfees.php',
+    '/receipt' => 'controllers/receipt.php'
 ];
 
 if(array_key_exists($uri, $routes)){
