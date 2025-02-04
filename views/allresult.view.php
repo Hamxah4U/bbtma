@@ -2,13 +2,15 @@
   require './model/Database.php';
   require 'views/partials/security.php';
 	require 'views/partials/header.php';
-  require 'vendor/autoload.php';
-use Endroid\QrCode\QrCode;
-use Endroid\QrCode\Writer\PngWriter;
-use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
-use Endroid\QrCode\Label\Label;
-use Endroid\QrCode\Label\Font\NotoSans;
+
+
+  /* require 'vendor/autoload.php';
+  use Endroid\QrCode\QrCode;
+  use Endroid\QrCode\Writer\PngWriter;
+  use Endroid\QrCode\Encoding\Encoding;
+  use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
+  use Endroid\QrCode\Label\Label;
+  use Endroid\QrCode\Label\Font\NotoSans; */
 
 
   function grade($Total){
@@ -158,7 +160,7 @@ use Endroid\QrCode\Label\Font\NotoSans;
 
             <table style='width:70%; margin: auto;' id='mytablehead'>
               <tbody>
-                <tr>
+                <tr style="white-space: nowrap; font-size: 11pt">
                   <td><strong>
                     <?php
                       foreach($studentInfo as $stdinfo){
@@ -220,7 +222,7 @@ use Endroid\QrCode\Label\Font\NotoSans;
                     <td><?= $index + 1 ?></td>
                     <td><?= $row['Subject_name'] ?></td>
                     <td><?= $row['first'] ?></td>
-                    <td><?= $row['second'] ?></td>
+                    <td><?= $row['second'] ?? 'abs' ?></td>
                     <td><?= $row['third'] ?></td>
                     <td><?= $row['exam'] ?></td>
                     <td><?= $row['tscore'] ?></td>
@@ -246,25 +248,25 @@ use Endroid\QrCode\Label\Font\NotoSans;
                       ]);
                       $tstudent = $totalStudent->rowCount();
                     ?>
-                    <tr>
-                      <td><strong style='font-size: 12pt;'>Position: <span style='font-size: 14pt;'><?= $studentposition.position($studentposition);?></span>
-                          Out of <span style='font-size: 14pt;'><?= $tstudent;?></span> Pupils</strong></td>
-                      <td><strong style='font-size: 11pt;'>Total Score: <span
-                            style='font-size: 14pt;'><?= $totalscore ?></span></strong></td>
-                      <td><strong style='font-size: 11pt;'>Average: <span
-                            style='font-size: 14pt;'><?php echo number_format((float)$avg,2,'.',);//sprintf("%.2f",$average); ?></span></strong>
+                    <tr style="white-space: nowrap; font-size: 10pt">
+                      <td><strong style='font-size: 10pt;'>Position: <span style='font-size: 10pt;'><?= $studentposition.position($studentposition);?></span>
+                          Out of <span style='font-size: 10pt;'><?= $tstudent;?></span> Pupils</strong></td>
+                      <td><strong style='font-size: 10pt;'>Total Score: <span
+                            style='font-size: 10pt;'><?= $totalscore ?></span></strong></td>
+                      <td><strong style='font-size: 10pt;'>Average: <span
+                            style='font-size: 10pt;'><?php echo number_format((float)$avg,2,'.',);//sprintf("%.2f",$average); ?></span></strong>
                       </td>
-                      <td><strong style='font-size: 11pt;'>Promoted to: _____________</strong></td>
+                      <td><strong style='font-size: 10pt;'>Promoted to: _____________</strong></td>
                     </tr>
                     <tr>
-                      <td><strong style='font-size: 11pt;'>Closing Date _________</strong></td>
-                      <td><strong style='font-size: 11pt;'>Resumption Date _________</strong></td>
-                      <td colspan="2"><strong style='font-size: 11pt;'>Class Teacher Comment:_____________</strong></td>
+                      <td><strong style='font-size: 10pt;'>Closing Date _______</strong></td>
+                      <td><strong style='font-size: 10pt;'>Resumption Date _______</strong></td>
+                      <td colspan="2"><strong style='font-size: 10pt;'>Class Teacher Comment:___________</strong></td>
                     </tr>
                     <tr>
-                      <td><strong style='font-size: 11pt;'>Next Term School Fees:_________</strong></td>
-                      <td><strong style='font-size: 11pt;'>Pre-Bal:_________</strong></td>
-                      <td><strong style='font-size: 11pt;'>Net Bal___________</strong></td>
+                      <td><strong style='font-size: 10pt;'>Next Term School Fees:_________</strong></td>
+                      <td><strong style='font-size: 10pt;'>Pre-Bal:_________</strong></td>
+                      <td><strong style='font-size: 10pt;'>Net Bal___________</strong></td>
                       <td>&nbsp;</td>
                     </tr>
                   </table>

@@ -100,7 +100,7 @@
                   $date_components = explode('-', $original_date);
                   $new_date = $date_components[2] . '-' . $date_components[1] . '-' . $date_components[0];
 
-                  echo "<tr>";
+                  echo "<tr style='white-space: nowrap;'>";
                   echo "<td><strong>" . ucwords(strtolower($studentDetails['FirstName'])) . " " . ucwords(strtolower($studentDetails['OtherName'])) ." ".ucwords(strtolower($studentDetails['Surname'])) ."</strong></td>";
                   echo "<td><strong>" . $studentDetails['Reg_no'] . "</strong></td>";
                   echo "<td><strong>" . htmlspecialchars($studentDetails['Class_Name']) . "</strong></td>";
@@ -207,24 +207,24 @@
               $tstudent = $totalStudent->rowCount();
             ?>
             <tr>
-              <td><strong style='font-size: 12pt;'>Position: <span style='font-size: 14pt;'><?= $studentposition.position($studentposition);?></span>
-                  Out of <span style='font-size: 14pt;'><?= $tstudent;?></span> Pupils</strong></td>
-              <td><strong style='font-size: 11pt;'>Total Score: <span
-                    style='font-size: 14pt;'><?= $totalscore ?></span></strong></td>
-              <td><strong style='font-size: 11pt;'>Average: <span
-                    style='font-size: 14pt;'><?php echo number_format((float)$avg,2,'.',);//sprintf("%.2f",$average); ?></span></strong>
+              <td><strong style='font-size: 10pt;'>Position: <span style='font-size: 10pt;'><?= $studentposition.position($studentposition);?></span>
+                Out of <span style='font-size: 10pt;'><?= $tstudent;?></span> Pupils</strong></td>
+              <td><strong style='font-size: 10pt;'>Total Score: <span
+                style='font-size: 10pt;'><?= $totalscore ?></span></strong></td>
+              <td><strong style='font-size: 10pt;'>Average: <span
+                style='font-size: 10pt;'><?php echo number_format((float)$avg,2,'.',);//sprintf("%.2f",$average); ?></span></strong>
               </td>
-              <td><strong style='font-size: 11pt;'>Promoted to: _____________</strong></td>
+              <td><strong style='font-size: 10pt;'>Promoted to: ___________</strong></td>
             </tr>
             <tr>
-              <td><strong style='font-size: 11pt;'>Closing Date _________</strong></td>
-              <td><strong style='font-size: 11pt;'>Resumption Date _________</strong></td>
-              <td colspan="2"><strong style='font-size: 11pt;'>Class Teacher Comment:_____________</strong></td>
+              <td><strong style='font-size: 10pt;'>Closing Date _______</strong></td>
+              <td><strong style='font-size: 10pt;'>Resumption Date _______</strong></td>
+              <td colspan="2"><strong style='font-size: 10pt;'>Class Teacher Comment:___________</strong></td>
             </tr>
             <tr>
-              <td><strong style='font-size: 11pt;'>Next Term School Fees:_________</strong></td>
-              <td><strong style='font-size: 11pt;'>Pre-Bal:_________</strong></td>
-              <td><strong style='font-size: 11pt;'>Net Bal___________</strong></td>
+              <td><strong style='font-size: 10pt;'>Next Term School Fees:_______</strong></td>
+              <td><strong style='font-size: 10pt;'>Pre-Bal:_______</strong></td>
+              <td><strong style='font-size: 10pt;'>Net Bal_________</strong></td>
               <td>&nbsp;</td>
             </tr>
           </table>
