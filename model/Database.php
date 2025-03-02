@@ -3,7 +3,7 @@
       public $conn;
       public function __construct()
       {
-        $dsn = 'mysql:host=localhost;dbname=bbtma'; //sfgeorgn_bbtma  schooldb
+        $dsn = 'mysql:host=localhost;dbname=schooldb'; //sfgeorgn_bbtma  schooldb
           $dbuser = 'root'; //sfgeorgn_bbtma
           $dbpass = ''; //*H@mxah4u#
           try {

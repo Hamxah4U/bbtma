@@ -92,6 +92,20 @@
 					</div>
 
 					<div class="form-group">
+						<label for="">Gender</label>
+						<select name="gender" id="" class="form-control">
+							<option value="--choose--"></option>
+							<?php
+								$stmt = $db->query('SELECT * FROM `gender_tbl`');
+								$genders = $stmt->fetchALL(PDO::FETCH_ASSOC);
+								foreach($genders as $gender): ?>
+								<option value="<?= $gender['id'] ?>"><?= $gender['Gender'] ?></option>
+								<?php endforeach ?>
+						</select>
+						<small id="errorGender" class="text-danger"></small>
+					</div>
+
+					<div class="form-group">
 						<label for="my-input">Role</label>
 						<select name="role" id="" class="form-control">
 							<option value="--choose--"></option>
@@ -199,6 +213,7 @@
 						$('#errorRole').text(response.errors.role || '');
 						$('#errorEmail').text(response.errors.email || response.errors.emailExist || ''); 
 						$('#errorPhone').text(response.errors.phone || response.errors.phoneExist || '');
+						$('#errorGender').text(response.errors.gender || '');
 					}else{
 						const Toast = Swal.mixin({
 							toast: true,

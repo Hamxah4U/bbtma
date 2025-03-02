@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
 if (!isset($_SESSION['userID']) && $uri != '/' && $uri != '/login') {
    header('Location: /');
@@ -29,7 +30,9 @@ $routes = [
     '/updateprofile' => 'controllers/updateprofile.php',
     '/schoolfees' => 'controllers/schoolfees.php',
     '/payschoolfees' => 'controllers/payschoolfees.php',
-    '/receipt' => 'controllers/receipt.php'
+    '/receipt' => 'controllers/receipt.php',
+    '/attendace' => 'controllers/attendace.php',
+    '/newschoolfees' => 'controllers/newschoolfees.php'
 ];
 
 if(array_key_exists($uri, $routes)){

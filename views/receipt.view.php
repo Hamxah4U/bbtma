@@ -24,28 +24,28 @@ require './model/Database.php';
               if(isset($_GET['referenceID'])){
                 $id = $_GET['referenceID'];
               }
-              $stmt = $db->conn->prepare("SELECT * FROM schoolfees_tbl JOIN `student_tbl` ON std_ID = `student_tbl`.`stu_ID` WHERE `schf_ID` = :id ");
+              $stmt = $db->conn->prepare("SELECT * FROM schoolfees_tbl JOIN `student_tbl` ON stdid = `student_tbl`.`stu_ID` WHERE `id` = :id ");
               $stmt->execute([':id' => $id]);
               $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
               if(count($rows) > 0):
                 foreach($rows as $row): ?>
                   <tr style="text-align: justify;">
 						        <th>Payment ID:</th>
-						        <td><?= $row['schf_ID'] ?></td>
+						        <td><?= $row['id'] ?></td>
 					        </tr>
 
                   <tr style="text-align: justify;">
-						        <th>Student</th>
+						        <th>Student:</th>
 						        <td><?= $row['FirstName'].' '.$row['Surname']	?></td>
 					        </tr>
 
                   <tr style="text-align: justify;">
                     <th>Amount Paid:</th>
-                    <td><?php echo '<span>&#8358; </span>'.$row['CreditSide'] ?></td>
+                    <td>&#8358;<?= number_format($row['payments'], 2) ?></td>
                   </tr>
                   <tr style="text-align: justify;">
                     <th>Date:</th>
-                    <td><?php echo $row['Date'] ?></td>
+                    <td><?php echo $row['created_at'] ?></td>
                   </tr>
                   <tr style="text-align: justify;">
                     <th>Time:</th>

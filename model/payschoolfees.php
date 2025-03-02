@@ -18,7 +18,7 @@
 
     if(empty($errors)){
       session_start();
-      $stmt = $db->conn->prepare("INSERT INTO `schoolfees_tbl`(std_ID,CreditSide,Narration,Cashby,userID) VALUES (:std_ID, :CreditSide, :Narration,  :Cashby, :userID)");
+      $stmt = $db->conn->prepare("INSERT INTO `schoolfees_tbl`(stdID,payments,Narration,Cashby,userID, created_at) VALUES (:std_ID, :CreditSide, :Narration,  :Cashby, :userID, CURRENT_DATE())");
       $stmt->execute([
         ':std_ID' => $stdid,
         ':CreditSide' => $cr,

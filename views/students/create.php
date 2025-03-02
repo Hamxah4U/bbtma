@@ -1,10 +1,9 @@
 <?php
-// require '../../model/Database.php';
-require './model/Database.php';
-  require 'views/partials/security.php';
-	require 'views/partials/header.php';
-	//require 'views/partials/Users.class.php';
-
+    // require '../../model/Database.php';
+    require './model/Database.php';
+    require 'views/partials/security.php';
+    require 'views/partials/header.php';
+    //require 'views/partials/Users.class.php';
 ?>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Page Wrapper -->
@@ -13,29 +12,16 @@ require './model/Database.php';
     <?php require 'views/partials/sidebar.php' ?>
 
     <!-- End of Sidebar -->
-
     <!-- Content Wrapper -->
   <div id="content-wrapper" class="d-flex flex-column">
-
 		<!-- Main Content -->
 		<div id="content">
-
-				<!-- Topbar -->
-				<?php
-						require 'views/partials/nav.php';
-				?>
-				<!-- End of Topbar -->
-
-				<!-- Begin Page Content -->
-				<div class="container-fluid">
-
-						<!-- Page Heading -->
-						<!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
-								<h1 class="h3 mb-0 text-gray-800"></h1>
-							<button class="btn btn-primary" type="button" data-target="#modalUser" data-toggle="modal">Add User</button>
-						</div> -->
-
-						<!-- Content Row -->
+            <!-- Topbar -->
+            <?php require 'views/partials/nav.php'; ?>
+            
+            <!-- Begin Page Content -->
+            <div class="container-fluid">         
+                    <!-- Content Row -->
                 <form method="POST" id="createStudent" enctype="multipart/form-data">
                     <div class="form-row">
                         <div class="col-md-4 mb-3">
@@ -145,7 +131,7 @@ require './model/Database.php';
                         </div>                
                     </div>
 
-                    <div class="form-row">
+                    <!-- <div class="form-row">
                         <div class="col-md-4 mb-3">
                             <label for="">Passport</label>
                             <input type="file" name="image" onchange="previewFile(this);" style="display: block;" class="form-contro">
@@ -154,21 +140,168 @@ require './model/Database.php';
                         <div class="col-md-4 mb-3">
                             <img id="previewImg" src="../../img/img__nopic_avatar6.jpg" alt="Placeholder" style="height: 40%;width:25%" class="form-control">
                         </div>
-                    </div>
+                    </div> -->
 
+                    <div class="form-row">
+                        <div class="col-md-4 mb-3">
+                            <label for="camera-icon">
+                                <i class="fas fa-camera" id="camera-icon" style="font-size: 48px; cursor: pointer;"></i>
+                            </label>
+                            <input type="file" id="camera-input" name="image" accept="image/*" capture="environment" style="display: none;">
+                            <video id="camera" style="display: none; width: 150px; height: 150px; border: 1px solid #ccc;" autoplay></video>
+                             <button id="capture" type="button" style="display: none;">Capture</button>
+                            <small class="text-danger" id="image"></small>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <img id="previewImg" src="../../img/img__nopic_avatar6.jpg" alt="Placeholder" style="height: 150px; width: 150px;" class="form-control">
+                        </div>
+                    </div><br/><br/>
 
                     <button class="btn btn-primary" name="newstudent" type="submit">Submit form</button>
                 </form>
-						<!-- Content Row -->
-				</div>
-				<!-- /.container-fluid -->
-
+                    <!-- Content Row -->
+            </div>
+            <!-- /.container-fluid -->
 		</div>
 		<!-- End of Main Content -->
+<?php require 'views/partials/footer.php'; ?>
 
-<?php
-    require 'views/partials/footer.php';
-?>
+<script>
+    $(document).ready(function() {
+    var video = document.querySelector("#camera");
+    var captureButton = document.querySelector("#capture");
+    var stream = null; // To store camera stream
+
+    // Open camera when clicking on the camera icon
+    $("#camera-icon").click(function() {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(camStream) {
+                stream = camStream;
+                video.srcObject = stream;
+                video.style.display = 'block';
+                captureButton.style.display = 'block';
+            })
+            .catch(function(err) {
+                console.log("Camera access denied: " + err);
+                alert("Please allow camera access.");
+            });
+    });
+
+    // Capture image from video stream
+    $("#capture").click(function() {
+        var canvas = document.createElement("canvas");
+        canvas.width = 150;
+        canvas.height = 150;
+        var context = canvas.getContext("2d");
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        var dataURL = canvas.toDataURL("image/png");
+
+        $("#previewImg").attr("src", dataURL);
+
+        // Convert dataURL to Blob
+        var blob = dataURLToBlob(dataURL);
+        var file = new File([blob], "captured_image.png", { type: "image/png" }); // Create File object
+
+        // Create a new DataTransfer object and append the file
+        var dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        $("#camera-input")[0].files = dataTransfer.files; // Assign the files property
+
+        // Stop camera stream
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+        }
+
+        video.style.display = 'none';
+        captureButton.style.display = 'none';
+    });
+
+    // Handle form submit event
+    $("#createStudent").submit(function(event) {
+        event.preventDefault(); // Prevent the default form submission
+        $('small.text-danger').text('');
+
+        // Create FormData and append the file
+        var formData = new FormData(this);
+
+        // Send FormData using AJAX
+        $.ajax({
+            url: "model/students/create.php",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                if (response.status) {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        }
+                    });
+                    Toast.fire({
+                        icon: "success",
+                        title: response.success.success
+                    });
+                    $("#createStudent")[0].reset();
+                    $("#previewImg").attr("src", "../../img/img__nopic_avatar6.jpg");
+                } else {
+                    if (response.errors) {
+                        for (const key in response.errors) {
+                            if (Object.hasOwnProperty.call(response.errors, key)) {
+                                $(`#${key}`).text(response.errors[key]);
+                            }
+                        }
+                    } else {
+                        alert("An error occurred. Please check the console.");
+                    }
+                }
+            },
+            error: function(error) {
+                console.error(error);
+                alert("An error occurred during the AJAX request.");
+            }
+        });
+    });
+
+    // Helper function to convert dataURL to Blob
+    function dataURLToBlob(dataURL) {
+        var parts = dataURL.split(';base64,');
+        var contentType = parts[0].split(':')[1];
+        var raw = window.atob(parts[1]);
+        var rawLength = raw.length;
+        var uInt8Array = new Uint8Array(rawLength);
+        for (var i = 0; i < rawLength; ++i) {
+            uInt8Array[i] = raw.charCodeAt(i);
+        }
+        return new Blob([uInt8Array], { type: contentType });
+    }
+});
+
+</script>
+
+<script>
+    function previewFile(input) {
+        var file = $(input).get(0).files[0];
+
+        if (file) {
+            var reader = new FileReader();
+
+            reader.onload = function() {
+                $("#previewImg").attr("src", reader.result);
+            }
+
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
 
 <script>
     $(document).ready(function () {
@@ -194,8 +327,23 @@ require './model/Database.php';
     }); 
 </script>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <script>
-    $(document).ready(function () {
+    /* $(document).ready(function () {
         $('#createStudent').on('submit', function (e) {
             e.preventDefault();
             $('small.text-danger').text('');
@@ -237,11 +385,22 @@ require './model/Database.php';
                 }
             });
         });
-    });
+    }); */
 </script>
 
+
+
+
+
+
+
+
+
+
+
+
 <script>
-	$(document).ready(function(){
+	/* $(document).ready(function(){
     $('#userForm').on('submit', function(e){
 			e.preventDefault();
 			$.ajax({
@@ -285,10 +444,11 @@ require './model/Database.php';
 					}
 			});
     });
-});
+}); */
 </script>
+
 <script>
-    function previewFile(input){
+    /* function previewFile(input){
         var file = $("input[type=file]").get(0).files[0];
  
         if(file){
@@ -300,6 +460,6 @@ require './model/Database.php';
  
             reader.readAsDataURL(file);
         }
-    }
+    } */
 </script>
 

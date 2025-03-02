@@ -1,7 +1,6 @@
 <?php
-    require '../Database.php';
-    //var_dump($db);
-
+   require '../Database.php';
+    
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
       $errors = [];
       $success = [];
@@ -57,20 +56,19 @@
         $errors['fname'] = 'Firstname is required!';
       }
 
-      if (!empty($featuredImage['name'])) {
+      if (!empty($_FILES['image']['name'])) {
         $targetDir = __DIR__ . '/uploads/';
-        
-        $fileType = strtolower(pathinfo($featuredImage['name'], PATHINFO_EXTENSION));
+        $fileType = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
         $fileName = uniqid('img_', true) . '.' . $fileType;
         $targetFilePath = $targetDir . $fileName;
-    
+
         $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
         if (!in_array($fileType, $allowedTypes)) {
-            $errors['image'] = 'Only JPG, JPEG, PNG, and GIF files are allowed!'.$targetDir;
-        } elseif (!move_uploaded_file($featuredImage['tmp_name'], $targetFilePath)) {
+            $errors['image'] = 'Only JPG, JPEG, PNG, and GIF files are allowed!';
+        } elseif (!move_uploaded_file($_FILES['image']['tmp_name'], $targetFilePath)) {
             $errors['image'] = 'Failed to upload the image!';
         }
-        } /* else {
+      } /* else {
         $errors['image'] = 'Image is required!';
       } */
 
@@ -110,5 +108,5 @@
         ]);
       }
 
-    }
+    } 
 ?>

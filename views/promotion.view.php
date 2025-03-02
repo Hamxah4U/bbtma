@@ -8,104 +8,115 @@
 <div id="wrapper">
     <!-- Sidebar -->
     <?php require 'partials/sidebar.php' ?>
-
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
   <div id="content-wrapper" class="d-flex flex-column">
-
-		<!-- Main Content -->
-		<div id="letter__">
-
-				<!-- Topbar -->
-				<?php
-						require 'partials/nav.php';
-				?>
-				<!-- End of Topbar -->
-
-				<!-- Begin Page Content -->
-				<div class="container-fluid">
-
-						<!-- Page Heading -->
-						<!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
-								<h1 class="h3 mb-0 text-gray-800"></h1>
-							<button class="btn btn-primary" type="button" data-target="#modalUser" data-toggle="modal">Add User</button>
-						</div> -->
-
-            <form id="classlist">
-              <label for="">List of Class</label>
-              <select name="class" id="selectclass" class="form-control">
-                <option value="--choose--">--choose--</option>
-                <?php
-                  $sql = $db->conn->prepare('SELECT * FROM `class_tbl` WHERE `Status` = "Active" ');
-                  $sql->execute();
-                  $classes = $sql->fetchAll(PDO::FETCH_ASSOC);
-                  foreach($classes as $class ):?>
-                  <option value="<?= $class['class_ID'] ?>"><?= $class['Class_Name'] ?></option>
-                <?php endforeach ?>
-              </select>
-              <br><br>
-            </form>
-						<!-- Content Row -->
-						<form>
-              <?php 
-                $sqlid = $db->conn->prepare('SELECT * FROM `student_tbl`');  //  mysqli_query($conn, "SELECT * FROM `student_tbl`") or die();
-                $sqlid->execute();// = mysqli_fetch_array($sqlid);
-                $id = $sqlid->fetchAll(PDO::FETCH_ASSOC);
-              ?>
-            <div id="letter">
-            <table class="table table-striped" id="usersTable">
-							<thead>
-								<tr>
-									<th>#</th>
-									<th>Fullname</th>
-									<th>Admission</th>
-									<th>Gender</th>
-									<th>DOB</th>
-									<th>Class</th>
-									<th class="table-head">Check All <input type="checkbox" id="allcb" name="allcb"/></th>
-								</tr>
-							</thead>
-							<tbody>
-
-							</tbody>
-						</table>
-            </div>
-            <div class="form-group row">
-              <!-- Print Button -->
-              <div class="col-lg-4">
-                <button class="btn btn-primary btn-lg" id="btn2" type="button" onclick="PrintDoc()">Print</button>
-              </div>
-
-              <div class="col-lg-4">
-                <select name="class" id="classSelect" class="form-control">
-                  <option value="--choose--">--choose--</option>
-                  <?php
+    <!-- Main Content -->
+    <div id="letter__">
+        <!-- Topbar -->
+        <?php require 'partials/nav.php'; ?>
+        <div class="container-fluid">          
+            <form id="promotionclass">
+                <label for="">List of Class</label>
+                <select name="cclass" id="selectclass" class="form-control">
+                    <option value="--choose--">--choose--</option>
+                    <?php
                     $sql = $db->conn->prepare('SELECT * FROM `class_tbl` WHERE `Status` = "Active" ');
                     $sql->execute();
                     $classes = $sql->fetchAll(PDO::FETCH_ASSOC);
-                    foreach($classes as $class ):?>
-                    <option value="<?= $class['class_ID'] ?>"><?= $class['Class_Name'] ?></option>
-                  <?php endforeach ?>                 
+                    foreach ($classes as $class) : ?>
+                        <option value="<?= $class['class_ID'] ?>"><?= $class['Class_Name'] ?></option>
+                    <?php endforeach ?>
                 </select>
-              </div>
-
-              <div class="col-lg-4">
-                <button class="btn btn-primary" name="promotedTo">Promoted To</button>
-              </div>
-            </div>
-
+                <small class="text-danger" id="cclass"></small>
+                <br><br>
+                <div id="letter">
+                <table class="table table-striped" id="usersTable">
+                    <thead>
+                        <tr>
+                        <th>#</th>
+                        <th>Fullname</th>
+                        <th>Admission</th>
+                        <th>Gender</th>
+                        <th>DOB</th>
+                        <th>Class</th>
+                        <th class="table-head">Check All <input type="checkbox" id="allcb" name="allcb"/> <small id="students" class="text-danger"></small></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+                </div>
+                <div class="form-group row">
+                    <div class="col-lg-4">
+                        <button class="btn btn-primary btn-lg" id="btn2" type="button" onclick="PrintDoc()">Print</button>
+                    </div>
+                    <div class="col-lg-4">
+                        <select name="classp" id="classSelect" class="form-control">
+                            <option value="--choose--">--choose--</option>
+                            <?php
+                            $sql = $db->conn->prepare('SELECT * FROM `class_tbl` WHERE `Status` = "Active" ');
+                            $sql->execute();
+                            $classes = $sql->fetchAll(PDO::FETCH_ASSOC);
+                            foreach ($classes as $class) : ?>
+                                <option value="<?= $class['class_ID'] ?>"><?= $class['Class_Name'] ?></option>
+                            <?php endforeach ?>
+                        </select>
+                        <small class="text-danger" id="classp"></small>
+                    </div>
+                    <div class="col-lg-4">
+                        <button class="btn btn-primary" name="promotedTo" type="submit">Promoted To</button>
+                    </div>
+                </div>
             </form>
-						<!-- Content Row -->
-				</div>
-				<!-- /.container-fluid -->
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <!-- End of Main Content -->
+<?php    require 'partials/footer.php'; ?>
+<script>
+  $(document).ready(function(){
+    $('#promotionclass').on('submit', function(e){
+        e.preventDefault();
+        $('.text-danger').text('');
+        $.ajax({
+            url: 'model/promotestudent.php',
+            data: $(this).serialize(),
+            type: 'POST',
+            dataType: 'JSON',
+            success: function(response){
+                if(!response.status){
+                    $.each(response.errors, function (key, value) {
+                        $('#' + key).text(value);
+                    });
+                }else{
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        }
+                        });
+                        Toast.fire({
+                        icon: "success",
+                        title: response.success.message//"Signed in successfully"
+                    });
+                }
+            },
+            error: function(xhr, status, error){
+                alert('Error: ' + status + '\nMessage: ' + error);
+            }
+        })
+    })
+  })
+</script>
 
-		</div>
-		<!-- End of Main Content -->
-
-<?php
-    require 'partials/footer.php';
-?>
 <script  type="text/javascript">
     $(document).ready(function() {
     $('#allcb').click(function(e) {
@@ -117,54 +128,51 @@
             $('#allcb').prop('checked', this.checked);
     });
 
-});
+    });
 </script>
 
 <script>
-$(document).ready(function () {
-    $('#selectclass').on('change', function () {
-        let selectedClass = $(this).val();
-        if (selectedClass !== "--choose--") {
-            $('#usersTable tbody').empty();
-
-            $.ajax({
-                url: 'model/promotion.table.php',
-                method: 'POST',
-                data: { class: selectedClass },
-                dataType: 'json',
-                success: function (response) {
-                    if (response.error) {
-                        alert(response.error);
-                        return;
+    $(document).ready(function () {
+        $('#selectclass').on('change', function () {
+            let selectedClass = $(this).val();
+            if (selectedClass !== "--choose--") {
+                $('#usersTable tbody').empty();
+                $.ajax({
+                    url: 'model/promotion.table.php',
+                    method: 'POST',
+                    data: { class: selectedClass },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.error) {
+                            alert(response.error);
+                            return;
+                        }
+                        let counter = 1;
+                        response.forEach(student => {
+                            let row = `
+                                <tr>
+                                    <td>${counter++}</td>
+                                    <td>${student.FirstName + ' '+ student.OtherName + ' ' + student.Surname}</td>
+                                    <td>${student.Reg_no}</td>
+                                    <td>${student.Gender}</td>
+                                    <td>${student.DOB}</td>
+                                    <td>${student.Class_Name}</td>
+                                    <td><center><input id="myID" type="checkbox" name="myID[]" value="${student.stu_ID}" style="width: 100%;"></center></td>
+                                </tr>
+                            `;
+                            $('#usersTable tbody').append(row);
+                        });
+                    },
+                    error: function () {
+                        alert('Failed to fetch students. Please try again.');
                     }
-                    let counter = 1;
-                    response.forEach(student => {
-                        let row = `
-                            <tr>
-                                <td>${counter++}</td>
-                                <td>${student.FirstName + ' '+ student.OtherName + ' ' + student.Surname}</td>
-                                <td>${student.Reg_no}</td>
-                                <td>${student.Gender}</td>
-                                <td>${student.DOB}</td>
-                                <td>${student.Class_Name}</td>
-                                <td><center><input id="myID" type="checkbox" name="myID[]" value="${student.stu_ID}" style="width: 100%;"></center></td>
-                            </tr>
-
-                        `;
-                        $('#usersTable tbody').append(row);
-                    });
-                },
-                error: function () {
-                    alert('Failed to fetch students. Please try again.');
-                }
-            });
-        } else {
-            alert('Please select a valid class.');
-        }
+                });
+            } else {
+                alert('Please select a valid class.');
+            }
+        });
     });
-});
 </script>
-
 
 <script>
     function PrintDoc() { 
@@ -231,5 +239,3 @@ $(document).ready(function () {
     newWin.close();
 }
 </script>
-
-

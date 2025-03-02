@@ -55,7 +55,7 @@
                 <a class="collapse-item" href="/addstudent"><strong>Add Student</strong></a>
                 <a class="collapse-item" href="/managstudent"><strong>Manage Student</strong></a>
                 <a class="collapse-item" href="/promotion"><strong>Manage Promotion</strong></a>
-                <a class="collapse-item" href="#"><strong>Attendance</strong></a>
+                <a class="collapse-item" href="/attendace"><strong>Attendance</strong></a>
             </div>
         </div>
     </li>
@@ -94,7 +94,7 @@
         </div>
     </li>
 
-    <li class="nav-item active">
+    <!-- <li class="nav-item active">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#promotion"
             aria-expanded="true" aria-controls="promotion">
             <i class="icofont-exchange"></i>
@@ -103,11 +103,10 @@
         <div id="promotion" class="collapse" aria-labelledby="headingUtilities"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
                 <a class="collapse-item" href="#">Manage Promotion</a>
             </div>
         </div>
-    </li>
+    </li> -->
 
     <li class="nav-item active">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#finance"
@@ -119,7 +118,8 @@
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
-                <a class="collapse-item" href="/schoolfees"><strong>School Fees</strong></a>
+                <a class="collapse-item" href="/schoolfees"><strong>Fee Collection</strong></a>
+                <a class="collapse-item" href="/newschoolfees"><strong>Set Fees</strong></a>
             </div>
         </div>
     </li>

@@ -33,7 +33,7 @@ require './model/Database.php';
 
           <div class="form-row">
             <div class="col-md-5 mb-3">
-                <input type="number" name="cr" placeholder="Credit" class="form-control">
+                <input type="number" name="cr" placeholder="Amount e.g 12,500" class="form-control">
                 <div class="text-danger" id="errorFirstname"></div>
                 <small class="text-danger" id="cr"></small>               
             </div>
@@ -42,7 +42,7 @@ require './model/Database.php';
               <small class="text-danger" id="narr"></small>
             </div>
             <div class="col-md-2 mb-3">
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="submit" class="btn btn-primary form-control">Save</button>
             </div>                
           </div>
 
@@ -71,7 +71,7 @@ require './model/Database.php';
               </thead>
               <tbody>
                 <?php
-                  $stmt = $db->conn->prepare('SELECT * FROM `schoolfees_tbl` WHERE `std_ID` = :id ORDER BY `Time` Desc ');
+                  $stmt = $db->conn->prepare('SELECT * FROM `schoolfees_tbl` WHERE `stdid` = :id ORDER BY `Time` Desc ');
                   $stmt->execute([
                     ':id' => $code
                   ]);
@@ -79,29 +79,29 @@ require './model/Database.php';
                   foreach($fees as $index=>$fee):?>
                   <tr>
                     <td><?= $index + 1 ?></td>
-                    <td><?= $fee['CreditSide'] ?></td>
-                    <td><?= $fee['DebitSide'] ?></td>
-                    <td><?php $bal = $fee['CreditSide'] - $fee['DebitSide'];echo $bal.'.00'; ?></td>
+                    <td><?= number_format($fee['fees'], 2) ?></td>
+                    <td><?= number_format($fee['payments'], 2) ?></td>
+                    <td><?php $bal = $fee['fees'] - $fee['payments'];//echo $bal.'.00'; ?></td>
                     <td>
                       <?php
-                        if($fee['CreditSide'] != '' && $fee['DebitSide'] == 0):?>
-                          <a rel="facebox" href="/receipt?referenceID=<?= $fee['schf_ID']; ?>" class="btn btn-sm btn-primary">Receipt</a>							<?php
+                        if($fee['payments'] != '' && $fee['fees'] == 0):?>
+                          <a rel="facebox" href="/receipt?referenceID=<?= $fee['id']; ?>" class="btn btn-sm btn-primary">Receipt</a>							<?php
                         endif;
                       ?>
                     </td>
                     <td><?= $fee['Narration'] ?></td>                    
                     <td><?= $fee['Cashby'] ?></td>
-                    <td><?= $fee['Date'] ?></td>
+                    <td><?= $fee['created_at'] ?></td>
                   </tr>
                 <?php endforeach ?>
                 <tr>						
 						      <th><strong>Total</strong></th>
                   <?php                     
-                    $stmtDebit = $db->conn->prepare('SELECT SUM(DebitSide) AS Total FROM schoolfees_tbl WHERE std_ID = :id');
+                    $stmtDebit = $db->conn->prepare('SELECT SUM(fees) AS Total FROM schoolfees_tbl WHERE stdid = :id');
                     $stmtDebit->execute([':id' => $code]);
                     $rowDebit = $stmtDebit->fetch(PDO::FETCH_ASSOC);
 
-                    $stmtCredit = $db->conn->prepare('SELECT SUM(CreditSide) AS Total FROM schoolfees_tbl WHERE std_ID = :id');
+                    $stmtCredit = $db->conn->prepare('SELECT SUM(payments) AS Total FROM schoolfees_tbl WHERE stdid = :id');
                     $stmtCredit->execute([':id' => $code]);
                     $rowCredit = $stmtCredit->fetch(PDO::FETCH_ASSOC);
 
@@ -136,6 +136,7 @@ require './model/Database.php';
   $(document).ready(function(){
     $('#schfees').on('submit', function(e){
       e.preventDefault();
+      $('.text-danger').text('');
       $.ajax({
         url: 'model/payschoolfees.php',
         dataType: 'JSON',
@@ -147,7 +148,25 @@ require './model/Database.php';
               $('#'+key).text(value);
             });
           }else{
-            alert('yes');
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "top-end",
+              showConfirmButton: false,
+              timer: 2000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+              }
+            });
+            Toast.fire({
+              icon: "success",
+              title: "Student's wallet was founded"
+            });
+            $('#schfees')[0].reset();
+            setTimeout(function(){
+              location.reload();
+            }, 3000);
           }
         },
         error: function(xhr, status, error){

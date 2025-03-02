@@ -12,6 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = trim($_POST['email']);
     $phone = trim($_POST['phone']);
     $role = trim($_POST['role']);
+    $gender = $_POST['gender'];
+    $address= $_POST['address'];
   
     $pass = 'password';
     $password = password_hash($pass, PASSWORD_BCRYPT);
@@ -21,6 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $stmtPhone = $db->checkExist('SELECT `Phone` FROM `users_tbl` WHERE `Phone` = :phone', ['phone' => $phone]);
     $phoneExist = $stmtPhone->rowCount();
+
+    if($gender == '--choose--'){
+        $errors['gender'] = 'Gender is required!';
+    }
 
     if ($phoneExist > 0) {
         $errors['phoneExist'] = 'Phone number already exists!';
@@ -47,14 +53,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
    if(empty($errors)){
+    session_start();
     try{
       $db = new Database();
-        $stmt = $db->conn->prepare('INSERT INTO `users_tbl` (`Fullname`, `Email`, `Phone`, `UserPassword`, `Role`) VALUES (:fname, :email, :phone, :pass, :userrole)');
+        $stmt = $db->conn->prepare('INSERT INTO `users_tbl` (`Fullname`, `Email`, `Phone`, `UserPassword`, `Role`, `Gender`, `Address`, `Added_by`, `Date_added`) VALUES (:fname, :email, :phone, :pass, :userrole, :gender, :adrs, :Added_by, CURRENT_DATE())');
         $stmt->bindParam(':fname', $fname, PDO::PARAM_STR);
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
         $stmt->bindParam(':pass', $password, PDO::PARAM_STR);
         $stmt->bindParam(':userrole', $role, PDO::PARAM_STR);
+        $stmt->bindParam(':gender', $gender);
+        $stmt->bindParam(':adrs', $address);
+        $stmt->bindParam(':Added_by', $_SESSION['email']);
         $result = $stmt->execute();
 
       if ($result) {

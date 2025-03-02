@@ -254,19 +254,19 @@
                       <td><strong style='font-size: 10pt;'>Total Score: <span
                             style='font-size: 10pt;'><?= $totalscore ?></span></strong></td>
                       <td><strong style='font-size: 10pt;'>Average: <span
-                            style='font-size: 10pt;'><?php echo number_format((float)$avg,2,'.',);//sprintf("%.2f",$average); ?></span></strong>
+                            style='font-size: 10pt;'><?php echo number_format((float)$avg,2,'.',); ?></span></strong>
                       </td>
-                      <td><strong style='font-size: 10pt;'>Promoted to: _____________</strong></td>
+                      <td><strong style='font-size: 10pt;'>Promoted to:_______</strong></td>
                     </tr>
                     <tr>
-                      <td><strong style='font-size: 10pt;'>Closing Date _______</strong></td>
-                      <td><strong style='font-size: 10pt;'>Resumption Date _______</strong></td>
-                      <td colspan="2"><strong style='font-size: 10pt;'>Class Teacher Comment:___________</strong></td>
+                      <td><strong style='font-size: 10pt;'>Closing Date: 05/10/2014</strong></td>
+                      <td><strong style='font-size: 10pt;'>Resumption Date: 09/01/2025</strong></td>
+                      <td colspan="2"><strong style='font-size: 10pt;'>Class Teacher Comment:__________</strong></td>
                     </tr>
                     <tr>
-                      <td><strong style='font-size: 10pt;'>Next Term School Fees:_________</strong></td>
-                      <td><strong style='font-size: 10pt;'>Pre-Bal:_________</strong></td>
-                      <td><strong style='font-size: 10pt;'>Net Bal___________</strong></td>
+                      <td><strong style='font-size: 10pt;'>Next Term School Fees:______</strong></td>
+                      <td><strong style='font-size: 10pt;'>Pre-Bal:_____</strong></td>
+                      <td><strong style='font-size: 10pt;'>Net Bal:_____</strong></td>
                       <td>&nbsp;</td>
                     </tr>
                   </table>
