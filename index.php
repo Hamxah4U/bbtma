@@ -1,8 +1,10 @@
 <?php
 session_start();
 
+
+
 $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
-if (!isset($_SESSION['userID']) && $uri != '/' && $uri != '/login') {
+if (!isset($_SESSION['userID']) && $uri != '/' && $uri != '/login' && $uri != '/home' && $uri != '/contact' && $uri != '/about') {
    header('Location: /');
    exit();
 }
@@ -32,7 +34,14 @@ $routes = [
     '/payschoolfees' => 'controllers/payschoolfees.php',
     '/receipt' => 'controllers/receipt.php',
     '/attendace' => 'controllers/attendace.php',
-    '/newschoolfees' => 'controllers/newschoolfees.php'
+    '/newschoolfees' => 'controllers/newschoolfees.php',
+
+    // parents
+    '/home' => 'controllers/parents/parent.php',
+    '/contact' => 'controllers/parents/contact.php',
+    '/about' => 'controllers/parents/about.php',
+
+
 ];
 
 if(array_key_exists($uri, $routes)){
