@@ -99,6 +99,7 @@
             type: 'POST',
             success: function(response){
                 console.log(response);
+
                 if(response.status){
                     Swal.fire({
                         icon: "success",
@@ -109,6 +110,7 @@
                         timer: 3000
                     });
                     $('#parentLogin')[0].reset();
+
                     setTimeout(function(){
                         window.location.href = response.success.redirect
                     }, 1000)

@@ -33,7 +33,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             $sname = $student['Surname'];
             $mname = $student['OtherName'];
             $gender = $student['Gender'];
+            $img = $student['Passphort'];
             $stdPassword = $student['Password'];
+            $id = $student['stu_ID'];
             if (password_verify($password, $stdPassword)) {
                 $_SESSION['email'] = $stdEmail;
                 $_SESSION['reg'] = $stdReg;
@@ -41,8 +43,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 $_SESSION['fname'] = $fname;
                 $_SESSION['mname'] = $mname;
                 $_SESSION['sname'] = $sname;
-                    $success['message'] = 'Login successful, please wait...';
-                    $success['redirect'] = '/parents/dashboard'; 
+                $_SESSION['img'] = $img;
+                $_SESSION['userID'] = $id;
+
+                $success['message'] = 'Login successful, please wait...';
+                $success['redirect'] = '/parentsdashboard'; 
             }else{
                 $errors['password_error'] = 'Invalid Password!';
             }

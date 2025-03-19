@@ -1,0 +1,1 @@
+<?php require 'views/parents/dashboard.view.php' ?>

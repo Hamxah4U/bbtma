@@ -23,6 +23,7 @@ $routes = [
     '/assigsub' => 'controllers/assigsub.php',
     '/calender' => 'controllers/calender.php',
     '/logout' => 'controllers/logout.php',
+    '/parentlogout' => 'controllers/parentlogout.php',
     '/changepassword' => 'controllers/changepassword.php',
     '/report' => 'controllers/report.php',
     '/printresult' => 'controllers/printresult.php',
@@ -40,6 +41,7 @@ $routes = [
     '/home' => 'controllers/parents/parent.php',
     '/contact' => 'controllers/parents/contact.php',
     '/about' => 'controllers/parents/about.php',
+    '/parentsdashboard' => 'controllers/parents/dashboard.php'
 
 
 ];
