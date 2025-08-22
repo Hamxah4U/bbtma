@@ -29,21 +29,14 @@
 															<small class="text-danger" id="emailError"></small>
 													</div>
 
-													<div class="form-group">
-															<label for="">Password:</label>
-															<input type="password" class="form-control form-control-user" name="password" id="exampleInputPassword" placeholder="***********">
-															<small class="text-danger" id="passError"></small>
-													</div>
-
 													<div class="d-flex justify-content-between align-items-center">
-                						<button type="submit" class="btn btn-primary">Login</button>
-                						<a href="/resetpassword" class="nav nav-link"><i class="text-danger">Forgot password?</i></a>
+                						<button type="submit" class="btn btn-info form-control">Reset</button>
             							</div>													
 												</form>
 											</div>
 										</div>
 										<div class="col-lg-2 p-3 p-lg-0"></div>
-									</div>
+								</div>
 							</div>
 						</div>
 
@@ -62,7 +55,7 @@
 		$('#loginForm').on('submit', function(e){
 			e.preventDefault();
 			$.ajax({
-					url: 'model/user.login.php',
+					url: 'model/resetpassword.php',
 					dataType: 'JSON',
 					data: $(this).serialize(),
 					type: 'POST',
@@ -80,7 +73,7 @@
 								toast: true,
 								position: "top-end",
 								showConfirmButton: false,
-								timer: 1000,
+								timer: 3000,
 								timerProgressBar: true,
 								didOpen: (toast) => {
 									toast.onmouseenter = Swal.stopTimer;

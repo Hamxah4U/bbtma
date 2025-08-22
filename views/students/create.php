@@ -1,9 +1,7 @@
 <?php
-    // require '../../model/Database.php';
     require './model/Database.php';
     require 'views/partials/security.php';
     require 'views/partials/header.php';
-    //require 'views/partials/Users.class.php';
 ?>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Page Wrapper -->
@@ -216,15 +214,13 @@
         captureButton.style.display = 'none';
     });
 
-    // Handle form submit event
+   
     $("#createStudent").submit(function(event) {
-        event.preventDefault(); // Prevent the default form submission
+        event.preventDefault(); 
         $('small.text-danger').text('');
 
-        // Create FormData and append the file
+       
         var formData = new FormData(this);
-
-        // Send FormData using AJAX
         $.ajax({
             url: "model/students/create.php",
             type: "POST",
